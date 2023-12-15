@@ -85,7 +85,23 @@ public class AuthActivity extends AppCompatActivity {
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w("SIGN IN", "signInWithEmail:failure", task.getException());
-                            errorMsg.setText(task.getException().getMessage());
+                            String exceptionMessage = task.getException().getMessage();
+                            if (exceptionMessage.equals("The supplied auth credential is incorrect, malformed or has expired.")){
+                                    errorMsg.setText("Incorrect password. Try again.");
+                            } else {
+                                if (exceptionMessage.length() < 20) {
+                                    errorMsg.setText(exceptionMessage);
+                                } else {
+                                    for (int i = 20; i > 0; i--) {
+                                        while (exceptionMessage.charAt(i) != ' '){
+                                            i++;
+                                        }
+                                        exceptionMessage = exceptionMessage.substring(0,i) + "\n" + exceptionMessage.substring(i);
+                                        System.out.println(exceptionMessage);
+                                    }
+                                    errorMsg.setText(exceptionMessage);
+                                }
+                            }
                         }
                     }
                 });
@@ -108,15 +124,30 @@ public class AuthActivity extends AppCompatActivity {
                             updateUI(user);
                         } else {
                             // If sign in fails, display a message to the user.
-                            Log.w("SIGN UP", "signUpWithCustomToken:failure", task.getException());
-                            errorMsg.setText(task.getException().getMessage());
-                            //updateUI(null);
+                            Log.w("SIGN UP", "signUpWithEmail:failure", task.getException());
+                            String exceptionMessage = task.getException().getMessage();
+                            if (exceptionMessage.equals("The supplied auth credential is incorrect, malformed or has expired.")){
+                                errorMsg.setText("Incorrect password. Try again.");
+                            } else {
+                                if (exceptionMessage.length() < 20) {
+                                    errorMsg.setText(exceptionMessage);
+                                } else {
+                                    for (int i = exceptionMessage.length() - 30; i > 30; i-=30) {
+                                        while (exceptionMessage.charAt(i) != ' '){
+                                            i--;
+                                        }
+                                        exceptionMessage = exceptionMessage.substring(0,i+1) + "\n" + exceptionMessage.substring(i+1);
+                                        System.out.println(exceptionMessage);
+                                    }
+                                    errorMsg.setText(exceptionMessage);
+                                }
+                            }
                         }
                     }
                 });
     }
 
-    void updateUI(FirebaseUser user){
+    protected void updateUI(FirebaseUser user){
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
     }
