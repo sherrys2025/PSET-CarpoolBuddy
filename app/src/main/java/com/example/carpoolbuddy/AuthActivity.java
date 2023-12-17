@@ -65,14 +65,45 @@ public class AuthActivity extends AppCompatActivity {
 //
 //    }
 
-    public void signIn(View v){
-        System.out.println("Sign in");
-        String email = emailField.getText().toString();
+    private void collectEmailAndPassword(String email, String password){
+        email = emailField.getText().toString();
         System.out.println(email);
-        String password = passwordField.getText().toString();
+        password = passwordField.getText().toString();
+        if(email.equals(null) || email.equals("")) {
+            errorMsg.setText("Please fill in the email.");
+            return;
+        }
+        if(password.equals(null) || password.equals("")) {
+            errorMsg.setText("Please fill in the password.");
+            return;
+        }
         System.out.println(password);
         System.out.println();
+    }
 
+    private void displayErrorMessage(String exceptionMessage){
+        if (exceptionMessage.equals("The supplied auth credential is incorrect, malformed or has expired.")){
+            errorMsg.setText("Incorrect password. Try again.");
+        } else {
+            if (exceptionMessage.length() < 20) {
+                errorMsg.setText(exceptionMessage);
+            } else {
+                for (int i = 20; i > 0; i--) {
+                    while (exceptionMessage.charAt(i) != ' '){
+                        i++;
+                    }
+                    exceptionMessage = exceptionMessage.substring(0,i) + "\n" + exceptionMessage.substring(i);
+                    System.out.println(exceptionMessage);
+                }
+                errorMsg.setText(exceptionMessage);
+            }
+        }
+    }
+
+    public void signIn(View v){
+        System.out.println("Sign in");
+        String email = "", password = "";
+        collectEmailAndPassword(email, password);
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -86,33 +117,15 @@ public class AuthActivity extends AppCompatActivity {
                             // If sign in fails, display a message to the user.
                             Log.w("SIGN IN", "signInWithEmail:failure", task.getException());
                             String exceptionMessage = task.getException().getMessage();
-                            if (exceptionMessage.equals("The supplied auth credential is incorrect, malformed or has expired.")){
-                                    errorMsg.setText("Incorrect password. Try again.");
-                            } else {
-                                if (exceptionMessage.length() < 20) {
-                                    errorMsg.setText(exceptionMessage);
-                                } else {
-                                    for (int i = 20; i > 0; i--) {
-                                        while (exceptionMessage.charAt(i) != ' '){
-                                            i++;
-                                        }
-                                        exceptionMessage = exceptionMessage.substring(0,i) + "\n" + exceptionMessage.substring(i);
-                                        System.out.println(exceptionMessage);
-                                    }
-                                    errorMsg.setText(exceptionMessage);
-                                }
-                            }
+                            displayErrorMessage(exceptionMessage);
                         }
                     }
                 });
     }
     public void signUp(View v){
         System.out.println("Sign up");
-        String email = emailField.getText().toString();
-        System.out.println(email);
-        String password = passwordField.getText().toString();
-        System.out.println(password);
-        System.out.println();
+        String email = "", password = "";
+        collectEmailAndPassword(email, password);
 
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -126,22 +139,7 @@ public class AuthActivity extends AppCompatActivity {
                             // If sign in fails, display a message to the user.
                             Log.w("SIGN UP", "signUpWithEmail:failure", task.getException());
                             String exceptionMessage = task.getException().getMessage();
-                            if (exceptionMessage.equals("The supplied auth credential is incorrect, malformed or has expired.")){
-                                errorMsg.setText("Incorrect password. Try again.");
-                            } else {
-                                if (exceptionMessage.length() < 20) {
-                                    errorMsg.setText(exceptionMessage);
-                                } else {
-                                    for (int i = exceptionMessage.length() - 30; i > 30; i-=30) {
-                                        while (exceptionMessage.charAt(i) != ' '){
-                                            i--;
-                                        }
-                                        exceptionMessage = exceptionMessage.substring(0,i+1) + "\n" + exceptionMessage.substring(i+1);
-                                        System.out.println(exceptionMessage);
-                                    }
-                                    errorMsg.setText(exceptionMessage);
-                                }
-                            }
+                            displayErrorMessage(exceptionMessage);
                         }
                     }
                 });
