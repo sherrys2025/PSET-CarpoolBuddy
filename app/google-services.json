@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "524145365621-90i5r2q24pkcl7g4h3vg076335vilsdf.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.carpoolbuddy",
+            "certificate_hash": "053c3ee4ee8aff9c666eb81455fe81b8c1059a61"
+          }
+        },
+        {
           "client_id": "524145365621-3ctkbchhuo0c91rh3ek02p7bhq9oc2eh.apps.googleusercontent.com",
           "client_type": 3
         }

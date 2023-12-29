@@ -31,11 +31,8 @@ import com.google.firebase.auth.GoogleAuthProvider;
 public class AuthActivity extends AppCompatActivity {
     private static final int RC_SIGN_IN = 9001;
 
-    private GoogleSignInClient mGoogleSignInClient;
+    public static GoogleSignInClient mGoogleSignInClient;
     private FirebaseAuth mAuth;
-    private FirebaseFirestore firestore;
-    private String selected;
-    private Spinner sUserType;
     private EditText emailField;
     private EditText passwordField;
 
@@ -90,6 +87,7 @@ public class AuthActivity extends AppCompatActivity {
             } catch (ApiException e) {
                 // Google Sign In failed, update UI appropriately
                 Log.w("GoogleActivity", "Google sign in failed", e);
+                System.out.println(e.getMessage());
             }
         }
     }
@@ -104,13 +102,18 @@ public class AuthActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
-                            Log.d("GoogleActivity", "signInWithCredential:success");
+                            Log.d("GoogleActivity SIGNIN", "signInWithCredential:success");
                             FirebaseUser user = mAuth.getCurrentUser();
-                            updateUI(user);
+                            if(!user.getEmail().endsWith("cis.edu.hk")) {
+                                FirebaseAuth.getInstance().signOut();
+                                mGoogleSignInClient.signOut();
+                                displayErrorMessage("Please use a CIS email address.");
+                            } else {
+                                updateUI(user);
+                            }
                         } else {
                             // If sign in fails, display a message to the user.
-                            Log.w("GoogleActivity", "signInWithCredential:failure", task.getException());
-                            updateUI(null);
+                            Log.w("GoogleActivity SIGNIN", "signInWithCredential:failure", task.getException());
                         }
                     }
                 });
@@ -128,32 +131,35 @@ public class AuthActivity extends AppCompatActivity {
 //
 //    }
 
-    private void collectEmailAndPassword(String email, String password){
-        email = emailField.getText().toString();
-        System.out.println(email);
-        password = passwordField.getText().toString();
+    private boolean checkEmailAndPassword(String email, String password){
         if(email.equals(null) || email.equals("")) {
             errorMsg.setText("Please fill in the email.");
-            return;
+            return true;
         }
         if(password.equals(null) || password.equals("")) {
             errorMsg.setText("Please fill in the password.");
-            return;
+            return true;
         }
+        if(!email.endsWith("cis.edu.hk")) {
+            displayErrorMessage("Please use a CIS email address.");
+            return true;
+        }
+
+        System.out.println(email);
         System.out.println(password);
-        System.out.println();
+        return false;
     }
 
     private void displayErrorMessage(String exceptionMessage){
         if (exceptionMessage.equals("The supplied auth credential is incorrect, malformed or has expired.")){
             errorMsg.setText("Incorrect password. Try again.");
         } else {
-            if (exceptionMessage.length() < 20) {
+            if (exceptionMessage.length() < 40) {
                 errorMsg.setText(exceptionMessage);
             } else {
-                for (int i = 20; i > 0; i--) {
+                for (int i = 40; i > 0; i-=40) {
                     while (exceptionMessage.charAt(i) != ' '){
-                        i++;
+                        i--;
                     }
                     exceptionMessage = exceptionMessage.substring(0,i) + "\n" + exceptionMessage.substring(i);
                     System.out.println(exceptionMessage);
@@ -165,45 +171,50 @@ public class AuthActivity extends AppCompatActivity {
 
     public void signIn(View v){
         System.out.println("Sign in");
-        String email = "", password = "";
-        collectEmailAndPassword(email, password);
+        String email = emailField.getText().toString();
+        String password = passwordField.getText().toString();
+
+        if(checkEmailAndPassword(email, password)){
+            return;
+        }
+
         mAuth.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            Log.d("SIGN IN", "signInWithEmail:success");
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            updateUI(user);
-                        } else {
-                            // If sign in fails, display a message to the user.
-                            Log.w("SIGN IN", "signInWithEmail:failure", task.getException());
-                            String exceptionMessage = task.getException().getMessage();
-                            displayErrorMessage(exceptionMessage);
-                        }
+                .addOnCompleteListener(this, task -> {
+                    if (task.isSuccessful()) {
+                        // Sign in success, update UI with the signed-in user's information
+                        Log.d("SIGN IN", "signInWithEmail:success");
+                        FirebaseUser user = mAuth.getCurrentUser();
+                        updateUI(user);
+                    } else {
+                        // If sign in fails, display a message to the user.
+                        Log.w("SIGN IN", "signInWithEmail:failure", task.getException());
+                        String exceptionMessage = task.getException().getMessage();
+                        displayErrorMessage(exceptionMessage);
                     }
                 });
     }
     public void signUp(View v){
         System.out.println("Sign up");
-        String email = "", password = "";
-        collectEmailAndPassword(email, password);
+
+        String email = emailField.getText().toString();
+        String password = passwordField.getText().toString();
+
+        if(checkEmailAndPassword(email, password)){
+            return;
+        }
 
         mAuth.createUserWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if(task.isSuccessful()){
-                            Log.d("SIGN UP", "signUpWithCustomToken:success");
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            updateUI(user);
-                        } else {
-                            // If sign in fails, display a message to the user.
-                            Log.w("SIGN UP", "signUpWithEmail:failure", task.getException());
-                            String exceptionMessage = task.getException().getMessage();
-                            displayErrorMessage(exceptionMessage);
-                        }
+                .addOnCompleteListener(this, task -> {
+                    if(task.isSuccessful()){
+                        Log.d("SIGN UP", "signUpWithCustomToken:success");
+                        FirebaseUser user = mAuth.getCurrentUser();
+                        sendEmailVerification();
+                        updateUI(user);
+                    } else {
+                        // If sign in fails, display a message to the user.
+                        Log.w("SIGN UP", "signUpWithEmail:failure", task.getException());
+                        String exceptionMessage = task.getException().getMessage();
+                        displayErrorMessage(exceptionMessage);
                     }
                 });
     }
@@ -213,11 +224,8 @@ public class AuthActivity extends AppCompatActivity {
         // [START send_email_verification]
         final FirebaseUser user = mAuth.getCurrentUser();
         user.sendEmailVerification()
-                .addOnCompleteListener(this, new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        // Email sent
-                    }
+                .addOnCompleteListener(this, task -> {
+                    // Email sent
                 });
         // [END send_email_verification]
     }
