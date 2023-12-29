@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Carpool Buddy</string>
+    <string name="default_web_client_id">1:524145365621:android:093582076da0f976ae1e3c</string>
 </resources>

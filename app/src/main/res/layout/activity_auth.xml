@@ -123,6 +123,7 @@
         android:fontFamily="sans-serif-medium"
         android:insetTop="2dp"
         android:insetBottom="2dp"
+        android:onClick="googleSignIn"
         android:text="Sign in with Google    "
         android:textAlignment="textEnd"
         android:textColor="#000000"
