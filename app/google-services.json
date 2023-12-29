@@ -12,7 +12,12 @@
           "package_name": "com.example.carpoolbuddy"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "524145365621-3ctkbchhuo0c91rh3ek02p7bhq9oc2eh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyCqn0a_GWvhUAgs85W9vTnnuct4SUay7Tk"
@@ -20,7 +25,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "524145365621-3ctkbchhuo0c91rh3ek02p7bhq9oc2eh.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }
