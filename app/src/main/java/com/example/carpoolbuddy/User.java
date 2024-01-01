@@ -1,18 +1,51 @@
 package com.example.carpoolbuddy;
 
-import android.net.Uri;
+import android.location.Location;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-
-import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.FirebaseUserMetadata;
-import com.google.firebase.auth.MultiFactor;
-import com.google.firebase.auth.MultiFactorInfo;
-import com.google.firebase.auth.UserInfo;
 
-import java.util.List;
+import java.util.ArrayList;
 
-public abstract class User extends FirebaseUser {
+public abstract class User{
+    protected String uid;
+    protected String name;
+    protected String email;
+    protected Location location;
+    protected ArrayList<String> ownedVehicles;
+
+    public User(FirebaseUser user){
+        uid = user.getUid();
+        name = user.getDisplayName();
+        email = user.getEmail();
+        location = new Location("");
+        ownedVehicles = new ArrayList<>();
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public ArrayList<String> getOwnedVehicles() {
+        return ownedVehicles;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getUid() {
+        return uid;
+    }
+
+    public Location getLocation() {
+        return location;
+    }
+
+    public void addVehicle(String id){
+        ownedVehicles.add(id);
+    }
+
+//    public void removeVehicle(String id){
+//        ownedVehicles.remove(id);
+//    }
 }
