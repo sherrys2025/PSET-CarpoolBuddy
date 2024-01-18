@@ -2,11 +2,9 @@
  *  This class is responsible for representing a vehicle.
  */
 
-package com.example.carpoolbuddy;
+package com.example.carpoolbuddy.Vehicles;
 
-import android.location.Location;
-import android.media.Image;
-
+import com.example.carpoolbuddy.Users.User;
 import com.google.type.DateTime;
 
 import java.io.*;
@@ -21,7 +19,6 @@ public class Vehicle implements Serializable {
     protected boolean open;
     protected double basePrice;
     protected DateTime date;
-    protected Route route;
 
 
     public Vehicle(User user, String model, int capacity, double basePrice, DateTime date){
@@ -34,7 +31,6 @@ public class Vehicle implements Serializable {
         open = true;
         this.basePrice = basePrice;
         this.date = date;
-        route = new Route(user.getLocation());
     }
 
     /**editInfo

@@ -15,4 +15,9 @@
     <style name="Theme.CarpoolBuddy.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="Theme.CarpoolBuddy.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="circleImageView" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
+    </style>
 </resources>
