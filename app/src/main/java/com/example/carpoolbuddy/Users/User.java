@@ -18,7 +18,16 @@ public abstract class User{
     protected ArrayList<String> ownedVehicles;
     protected boolean setUp;
 
+    public User(){
+        uid = "XXXXXXXXX";
+        name = "user name";
+        email = "email@cis.edu.hk";
 
+        profilePic = Uri.parse("profilepicture.png");
+        setUp = false;
+        ownedVehicles = new ArrayList<>();
+        userType = "Staff";
+    }
 
     public User(FirebaseUser user, String userType){
         uid = user.getUid();

@@ -44,6 +44,7 @@ public class AuthActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         System.out.println("print");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_auth);

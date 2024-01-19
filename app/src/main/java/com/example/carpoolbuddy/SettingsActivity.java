@@ -22,6 +22,7 @@ import com.example.carpoolbuddy.Users.Alum;
 import com.example.carpoolbuddy.Users.Staff;
 import com.example.carpoolbuddy.Users.Student;
 import com.example.carpoolbuddy.Users.User;
+import com.google.android.gms.tasks.OnCanceledListener;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -45,6 +46,7 @@ public class SettingsActivity extends AppCompatActivity {
 
     private TextView errorMsg;
 
+    private String debuggingMessage;
     private Uri image;
 
     private ImageButton returnButton;
@@ -58,12 +60,29 @@ public class SettingsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
 
+        firestore = FirebaseFirestore.getInstance();
         profilePic = findViewById(R.id.profilePicSettings);
 
 
         userId = getIntent().getStringExtra("uid");
+        System.out.println("Uid: " + userId);
+        debuggingMessage = "it never ran";
         findUser();
-        setProfilePic(user.getProfilePic());
+
+        System.out.println(debuggingMessage);
+
+        if (studentUser == null && alumUser == null && staffUser == null) {
+            System.out.println("oh no, to object didn't work");
+        } else {
+            System.out.println("one of them is set up");
+        }
+
+        if (user == null){
+            System.out.println("user is null");
+        } else {
+            System.out.println("user is not null");
+            setProfilePic(user.getProfilePic());
+        }
 
         name = findViewById(R.id.nameSettingEdit);
         locationOfUser = findViewById(R.id.locationSettings2);
@@ -79,8 +98,6 @@ public class SettingsActivity extends AppCompatActivity {
             returnButton.setVisibility(View.VISIBLE);
             updateAll.setText("Update Profile");
         }
-
-        firestore = FirebaseFirestore.getInstance();
 
         switch (user.getUserType()) {
             case "Student":
@@ -103,6 +120,7 @@ public class SettingsActivity extends AppCompatActivity {
                 DocumentSnapshot ds = task.getResult();
                 User user1 = ds.toObject(User.class);
 
+                System.out.println("the user: " + user1.toString());
                 switch (user1.getUserType()) {
                     case "Student":
                         studentUser = ds.toObject(Student.class);
@@ -116,8 +134,16 @@ public class SettingsActivity extends AppCompatActivity {
                         staffUser = ds.toObject(Staff.class);
                         user = staffUser;
                 }
+            } else {
+                if (task.isCanceled()) {
+                    System.out.println("cancelled");
+                } else {
+                    System.out.println("task exception:" + task.getException().getMessage().toString());
+                    debuggingMessage = task.getException().getMessage().toString();
+                }
             }
         });
+
     }
 
     private void setProfilePic(Uri uri){

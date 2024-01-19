@@ -24,6 +24,7 @@ public class VehicleProfileActivity extends AppCompatActivity {
         FirebaseUser user = mAuth.getCurrentUser();
 
         Intent intent = new Intent(this, SettingsActivity.class);
+        System.out.println(user.getUid());
         intent.putExtra("uid", user.getUid());
         startActivity(intent);
     }
