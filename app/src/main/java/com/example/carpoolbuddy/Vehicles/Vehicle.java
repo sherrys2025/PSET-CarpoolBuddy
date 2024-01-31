@@ -4,6 +4,8 @@
 
 package com.example.carpoolbuddy.Vehicles;
 
+import android.net.Uri;
+
 import com.example.carpoolbuddy.Users.User;
 import com.google.type.DateTime;
 
@@ -19,6 +21,8 @@ public class Vehicle implements Serializable {
     protected boolean open;
     protected double basePrice;
     protected DateTime date;
+
+    protected Uri imageOfVehicle;
 
 
     public Vehicle(User user, String model, int capacity, double basePrice, DateTime date){

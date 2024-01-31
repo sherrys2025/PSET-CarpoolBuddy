@@ -9,6 +9,11 @@ import com.google.firebase.auth.FirebaseUser;
 
 public class Alum extends User {
     protected int graduateYear;
+
+    public Alum(){
+        super();
+        graduateYear = 2023;
+    }
     public Alum(FirebaseUser user, int graduateYear) {
         super(user, "Alum");
         this.graduateYear = graduateYear;
@@ -19,7 +24,7 @@ public class Alum extends User {
         this.graduateYear = 2023;
     }
 
-    public void changeValues(String name, String location, int graduateYear, Uri pic){
+    public void changeValues(String name, String location, int graduateYear, String pic){
         changeAllValues(name, location, pic);
         this.graduateYear = graduateYear;
     }

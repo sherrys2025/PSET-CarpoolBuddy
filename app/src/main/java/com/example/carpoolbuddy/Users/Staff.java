@@ -10,6 +10,11 @@ import com.google.firebase.auth.FirebaseUser;
 
 public class Staff extends User {
     protected String inSchoolTitle;
+
+    public Staff(){
+        super();
+        this.inSchoolTitle = "N/A";
+    }
     public Staff(FirebaseUser user) {
         super(user, "Staff");
         inSchoolTitle = "N/A";
@@ -24,7 +29,7 @@ public class Staff extends User {
         this.inSchoolTitle = inSchoolTitle;
     }
 
-    public void changeValues(String name, String location, String inSchoolTitle, Uri pic){
+    public void changeValues(String name, String location, String inSchoolTitle, String pic){
         changeAllValues(name, location, pic);
         setInSchoolTitle(inSchoolTitle);
     }

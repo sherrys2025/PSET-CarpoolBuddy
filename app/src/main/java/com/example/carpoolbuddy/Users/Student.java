@@ -10,6 +10,11 @@ import com.google.firebase.auth.FirebaseUser;
 
 public class Student extends User {
     protected int graduatingYear;
+
+    public Student(){
+        super();
+        this.graduatingYear = 2024;
+    }
     public Student(FirebaseUser user) {
         super(user, "Student");
         this.graduatingYear = 2024;
@@ -19,7 +24,7 @@ public class Student extends User {
         this.graduatingYear = graduatingYear;
     }
 
-    public void changeValues(String name, String location, int graduatingYear, Uri pic){
+    public void changeValues(String name, String location, int graduatingYear, String pic){
         changeAllValues(name, location, pic);
         this.graduatingYear = graduatingYear;
     }

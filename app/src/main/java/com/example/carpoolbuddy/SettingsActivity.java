@@ -25,6 +25,7 @@ import com.example.carpoolbuddy.Users.User;
 import com.google.android.gms.tasks.OnCanceledListener;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -47,10 +48,11 @@ public class SettingsActivity extends AppCompatActivity {
     private TextView errorMsg;
 
     private String debuggingMessage;
-    private Uri image;
+    private String image;
 
     private ImageButton returnButton;
     private Button updateAll;
+    private TextView email;
 
     private final int GALLERY_INT_REQ_CODE = 1000;
 
@@ -69,7 +71,6 @@ public class SettingsActivity extends AppCompatActivity {
         debuggingMessage = "it never ran";
         findUser();
 
-        System.out.println(debuggingMessage);
 
         if (studentUser == null && alumUser == null && staffUser == null) {
             System.out.println("oh no, to object didn't work");
@@ -91,64 +92,90 @@ public class SettingsActivity extends AppCompatActivity {
         errorMsg = findViewById(R.id.errorMsg);
         returnButton = findViewById(R.id.backButtonSettings);
         updateAll = findViewById(R.id.update);
-        if (!user.isSetUp()) {
-            returnButton.setVisibility(View.GONE);
-            updateAll.setText("Create Profile");
-        } else {
-            returnButton.setVisibility(View.VISIBLE);
-            updateAll.setText("Update Profile");
-        }
-
-        switch (user.getUserType()) {
-            case "Student":
-                uniqueFieldLabel.setText("Graduating Year:");
-                break;
-            case "Alum":
-                uniqueFieldLabel.setText("Graduate Year:");
-                break;
-            default:
-                uniqueFieldLabel.setText("In School Title:");
-        }
+        email = findViewById(R.id.emailSetting);
+//        if (!user.isSetUp()) {
+//            returnButton.setVisibility(View.GONE);
+//            updateAll.setText("Create Profile");
+//        } else {
+//            returnButton.setVisibility(View.VISIBLE);
+//            updateAll.setText("Update Profile");
+//        }
+//        switch (user.getUserType()) {
+//            case "Student":
+//                uniqueFieldLabel.setText("Graduating Year:");
+//                break;
+//            case "Alum":
+//                uniqueFieldLabel.setText("Graduate Year:");
+//                break;
+//            default:
+//                uniqueFieldLabel.setText("In School Title:");
+//        }
+//
+//        email.setText(user.getEmail());
 
 
 
     }
 
     private void findUser(){
-        firestore.collection("users").document(userId).get().addOnCompleteListener(task -> {
+        DocumentReference docRef = firestore.collection("users").document(userId);
+        docRef.get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
-                DocumentSnapshot ds = task.getResult();
-                User user1 = ds.toObject(User.class);
+                System.out.println("cici success!!!!!!!");
+                DocumentSnapshot document = task.getResult();
+                if (document.exists()) {
+                    user = document.toObject(User.class);
+                    System.out.println(user.getEmail());
+                    if (user != null) {
+                        System.out.println("success!!!!!!!");
 
-                System.out.println("the user: " + user1.toString());
-                switch (user1.getUserType()) {
-                    case "Student":
-                        studentUser = ds.toObject(Student.class);
-                        user = studentUser;
-                        break;
-                    case "Alum":
-                        alumUser = ds.toObject(Alum.class);
-                        user = alumUser;
-                        break;
-                    default:
-                        staffUser = ds.toObject(Staff.class);
-                        user = staffUser;
+                        name.setText(user.getName());
+                    } else {
+                        Log.d("TAG", "User document does not contain valid data");
+                    }
+                } else {
+                    Log.d("TAG", "User document does not exist");
                 }
             } else {
-                if (task.isCanceled()) {
-                    System.out.println("cancelled");
-                } else {
-                    System.out.println("task exception:" + task.getException().getMessage().toString());
-                    debuggingMessage = task.getException().getMessage().toString();
-                }
+                Log.d("TAG", "Error retrieving user document: " + task.getException());
             }
         });
 
+        System.out.println("firebase: "+firestore);
+
+//        DocumentReference docRef = firestore.collection("users").document(userId);
+//        docRef.get().addOnCompleteListener(task -> {
+//            System.out.println("printed");
+//            if (task.isSuccessful()){
+//                DocumentSnapshot document = task.getResult();
+//                if (document.exists()) {
+//                    User user1 = document.toObject(User.class);
+//                    System.out.println("the user: " + user1.toString());
+//                    switch (user1.getUserType()) {
+//                        case "Student":
+//                            studentUser = document.toObject(Student.class);
+//                            user = studentUser;
+//                            break;
+//                        case "Alum":
+//                            alumUser = document.toObject(Alum.class);
+//                            user = alumUser;
+//                            break;
+//                        default:
+//                            staffUser = document.toObject(Staff.class);
+//                            user = staffUser;
+//                          }
+//                    }
+//                } else {
+//                    System.out.println("ELSE");
+//            }
+        //});
+//        System.out.println("end");
+
     }
 
-    private void setProfilePic(Uri uri){
+    private void setProfilePic(String uri){
         image = uri;
-        profilePic.setImageURI(uri);
+        profilePic.setImageURI(Uri.parse(image));
     }
 
     public void uploadPic(View v){
@@ -166,7 +193,7 @@ public class SettingsActivity extends AppCompatActivity {
 
         if(resultCode == RESULT_OK){
             if(requestCode == GALLERY_INT_REQ_CODE){
-                setProfilePic(data.getData());
+                setProfilePic(String.valueOf(data.getData()));
             }
         }
     }
@@ -240,7 +267,9 @@ public class SettingsActivity extends AppCompatActivity {
 
     public void logOut(View v) {
         FirebaseAuth.getInstance().signOut();
-        AuthActivity.mGoogleSignInClient.signOut();
+        if (AuthActivity.mGoogleSignInClient!=null) {
+            AuthActivity.mGoogleSignInClient.signOut();
+        }
         logOutInstance();
     }
 

@@ -240,7 +240,7 @@ public class LoadingActivity extends AppCompatActivity {
             }
         });
 
-        nextClass[0] = MainActivity.class;
+        //nextClass[0] = MainActivity.class;
         Intent intent = new Intent(this, nextClass[0]);
         intent.putExtra("uid", user.getUid());
         startActivity(intent);

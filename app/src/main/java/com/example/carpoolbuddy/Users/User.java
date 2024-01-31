@@ -6,15 +6,14 @@ import android.net.Uri;
 import com.google.firebase.auth.FirebaseUser;
 
 import java.util.ArrayList;
-import java.util.Locale;
 
-public abstract class User{
+public class User{
     protected String uid;
     protected String name;
     protected String email;
     protected Location location = null;
     protected String userType;
-    protected Uri profilePic;
+    protected String profilePic;
     protected ArrayList<String> ownedVehicles;
     protected boolean setUp;
 
@@ -23,7 +22,7 @@ public abstract class User{
         name = "user name";
         email = "email@cis.edu.hk";
 
-        profilePic = Uri.parse("profilepicture.png");
+        profilePic = "profilepicture.png";
         setUp = false;
         ownedVehicles = new ArrayList<>();
         userType = "Staff";
@@ -33,7 +32,7 @@ public abstract class User{
         uid = user.getUid();
         name = user.getDisplayName();
         email = user.getEmail();
-        profilePic = Uri.parse("profilepic.png");
+        profilePic = "profilepic.png";
         if (name==null) {
             int indexOfAt = email.indexOf('@');
             name = email.substring(0, indexOfAt);
@@ -43,7 +42,7 @@ public abstract class User{
         this.userType = userType;
     }
 
-    public void changeAllValues(String name, String loca, Uri photo){
+    public void changeAllValues(String name, String loca, String photo){
         this.name = name;
         this.location = new Location(loca);
         this.profilePic = photo;
@@ -81,7 +80,7 @@ public abstract class User{
 //    }
 
 
-    public Uri getProfilePic() {
+    public String getProfilePic() {
         return profilePic;
     }
 

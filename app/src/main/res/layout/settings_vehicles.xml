@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/darkgreen">
+
+<!--    <ImageView-->
+<!--        android:id="@+id/imageView4"-->
+<!--        android:layout_width="393dp"-->
+<!--        android:layout_height="215dp"-->
+<!--        android:layout_marginTop="15dp"-->
+<!--        android:scaleType="fitXY"-->
+<!--        android:src="@drawable/cardefaultpic"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintHorizontal_bias="0.5"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent" />-->
+
+    <TextView
+        android:id="@+id/userTypeSettings2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="36dp"
+        android:text="Staff"
+        android:textColor="#ECECEC"
+        android:textSize="16sp"
+        android:textStyle="italic"
+        app:layout_constraintBottom_toBottomOf="@+id/userTypeSettings"
+        app:layout_constraintStart_toEndOf="@+id/userTypeSettings" />
+
+    <TextView
+        android:id="@+id/userTypeSettings"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Owner: "
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        tools:layout_editor_absoluteX="50dp"
+        tools:layout_editor_absoluteY="273dp" />
+
+    <TextView
+        android:id="@+id/uniqueSettings"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:text="Type of Vehicle:"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@+id/userTypeSettings"
+        app:layout_constraintTop_toBottomOf="@+id/userTypeSettings" />
+
+    <TextView
+        android:id="@+id/uidSettings"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:text="User ID:"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@+id/numOfVehiclesSettings4"
+        app:layout_constraintTop_toBottomOf="@+id/numOfVehiclesSettings4" />
+
+    <EditText
+        android:id="@+id/locationSettings2"
+        android:layout_width="300dp"
+        android:layout_height="52dp"
+        android:drawableRight="@android:drawable/ic_menu_edit"
+        android:ems="10"
+        android:inputType="textPostalAddress"
+        android:textColor="@color/white"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/locationSettings"
+        app:layout_constraintTop_toBottomOf="@+id/locationSettings" />
+
+    <TextView
+        android:id="@+id/numOfVehiclesSettings2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="36dp"
+        android:text="0"
+        android:textColor="#ECECEC"
+        android:textSize="16sp"
+        android:textStyle="italic"
+        app:layout_constraintBottom_toBottomOf="@+id/numOfVehiclesSettings4"
+        app:layout_constraintStart_toEndOf="@+id/numOfVehiclesSettings4" />
+
+    <EditText
+        android:id="@+id/uniqueSettings2"
+        android:layout_width="129dp"
+        android:layout_height="43dp"
+        android:layout_marginStart="36dp"
+        android:layout_marginTop="24dp"
+        android:drawableRight="@android:drawable/ic_menu_edit"
+        android:text="2024"
+        android:textColor="#ECECEC"
+        android:textSize="16sp"
+        android:textStyle="italic"
+        app:layout_constraintStart_toEndOf="@+id/uniqueSettings"
+        app:layout_constraintTop_toBottomOf="@+id/userTypeSettings2" />
+
+    <TextView
+        android:id="@+id/numOfVehiclesSettings6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="36dp"
+        android:text="XXXXXXXXXXXXXX"
+        android:textColor="#ECECEC"
+        android:textSize="16sp"
+        android:textStyle="italic"
+        app:layout_constraintBottom_toBottomOf="@+id/uidSettings"
+        app:layout_constraintStart_toEndOf="@+id/uidSettings" />
+
+    <TextView
+        android:id="@+id/numOfVehiclesSettings4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:text="Capacity: "
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@+id/uniqueSettings"
+        app:layout_constraintTop_toBottomOf="@+id/uniqueSettings" />
+
+    <TextView
+        android:id="@+id/locationSettings"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:text="Location: "
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@+id/uidSettings"
+        app:layout_constraintTop_toBottomOf="@+id/uidSettings" />
+
+    <Spinner
+        android:id="@+id/spinner2"
+        android:layout_width="132dp"
+        android:layout_height="22dp"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="@+id/uniqueSettings"
+        app:layout_constraintStart_toEndOf="@+id/uniqueSettings" />
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+
+
