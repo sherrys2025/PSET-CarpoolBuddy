@@ -24,6 +24,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -36,6 +37,12 @@ public class LoadingActivity extends AppCompatActivity {
 
     private FirebaseFirestore firestore;
     private String type;
+
+    private User user;
+    private Alum alumUser;
+    private Student studentUser;
+    private Staff staffUser;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -225,24 +232,24 @@ public class LoadingActivity extends AppCompatActivity {
     protected void updateUI(FirebaseUser user){
 
         final Class[] nextClass = new Class[1];
-        firestore.collection("users").document(user.getUid()).get().addOnCompleteListener(task -> {
-            if (task.isSuccessful()){
-                DocumentSnapshot ds = task.getResult();
-                User user1 = ds.toObject(User.class);
-
-                if (user1.isSetUp()){
-                    nextClass[0] = SettingsActivity.class;
-                } else {
-                    nextClass[0] = VehicleProfileActivity.class;
-                }
-            } else {
-                Log.w("Failed get user", task.getException());
-            }
-        });
-
-        //nextClass[0] = MainActivity.class;
-        Intent intent = new Intent(this, nextClass[0]);
-        intent.putExtra("uid", user.getUid());
-        startActivity(intent);
+        DocumentReference docRef = firestore.collection("users").document(user.getUid());
+        docRef.get().addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        DocumentSnapshot document = task.getResult();
+                        if (document.exists()) {
+                            User user1 = document.toObject(User.class);
+                            if (!user1.isSetUp()){
+                                nextClass[0] = SettingsActivity.class;
+                            } else {
+                                nextClass[0] = VehicleProfileActivity.class;
+                            }
+                            Intent intent = new Intent(this, nextClass[0]);
+                            intent.putExtra("uid", user.getUid());
+                            startActivity(intent);
+                        }
+                    }
+                });
     }
+
+
 }

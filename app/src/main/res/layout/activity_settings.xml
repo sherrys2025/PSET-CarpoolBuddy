@@ -13,6 +13,7 @@
         android:layout_width="74dp"
         android:layout_height="74dp"
         android:layout_marginTop="78dp"
+        android:onClick="uploadPic"
         android:outlineProvider="none"
         android:scaleType="centerCrop"
         app:layout_constraintStart_toStartOf="@+id/editSettings"
@@ -96,6 +97,7 @@
         android:layout_marginStart="13dp"
         android:layout_marginTop="17dp"
         android:backgroundTint="#00FFFFFF"
+        android:onClick="backToMain"
         android:scaleType="fitXY"
         android:tintMode="multiply"
         app:layout_constraintStart_toStartOf="parent"
@@ -119,7 +121,7 @@
         android:id="@+id/userTypeSettings"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="68dp"
+        android:layout_marginTop="44dp"
         android:text="User Type: "
         android:textColor="@color/white"
         android:textSize="16sp"
@@ -140,7 +142,7 @@
         app:layout_constraintTop_toBottomOf="@+id/userTypeSettings" />
 
     <TextView
-        android:id="@+id/uidSettings"
+        android:id="@+id/uidSettingsLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
@@ -148,8 +150,8 @@
         android:textColor="@color/white"
         android:textSize="16sp"
         android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="@+id/numOfVehiclesSettings4"
-        app:layout_constraintTop_toBottomOf="@+id/numOfVehiclesSettings4" />
+        app:layout_constraintStart_toStartOf="@+id/numOfVehiclesSettings"
+        app:layout_constraintTop_toBottomOf="@+id/numOfVehiclesSettings" />
 
     <EditText
         android:id="@+id/locationSettings2"
@@ -204,28 +206,16 @@
         app:layout_constraintTop_toBottomOf="@+id/userTypeSettings2" />
 
     <TextView
-        android:id="@+id/numOfVehiclesSettings6"
+        android:id="@+id/uidSettings"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="36dp"
+        android:layout_marginStart="16dp"
         android:text="XXXXXXXXXXXXXX"
         android:textColor="#ECECEC"
         android:textSize="16sp"
         android:textStyle="italic"
-        app:layout_constraintBottom_toBottomOf="@+id/uidSettings"
-        app:layout_constraintStart_toEndOf="@+id/uidSettings" />
-
-    <TextView
-        android:id="@+id/numOfVehiclesSettings4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:text="Number of Vehicles: "
-        android:textColor="@color/white"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="@+id/uniqueSettings"
-        app:layout_constraintTop_toBottomOf="@+id/uniqueSettings" />
+        app:layout_constraintBottom_toBottomOf="@+id/uidSettingsLabel"
+        app:layout_constraintStart_toEndOf="@+id/uidSettingsLabel" />
 
     <TextView
         android:id="@+id/locationSettings"
@@ -236,8 +226,8 @@
         android:textColor="@color/white"
         android:textSize="16sp"
         android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="@+id/uidSettings"
-        app:layout_constraintTop_toBottomOf="@+id/uidSettings" />
+        app:layout_constraintStart_toStartOf="@+id/uidSettingsLabel"
+        app:layout_constraintTop_toBottomOf="@+id/uidSettingsLabel" />
 
     <TextView
         android:id="@+id/errorMsgSettings"
@@ -264,5 +254,22 @@
         android:text="Log out"
         app:layout_constraintBottom_toBottomOf="@+id/backButtonSettings"
         app:layout_constraintEnd_toEndOf="parent" />
+
+    <ProgressBar
+        android:id="@+id/progressBarSettings"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="124dp"
+        android:layout_height="50dp"
+        android:indeterminate="true"
+        android:indeterminateTint="@color/lightgreen"
+        android:max="@integer/material_motion_duration_medium_1"
+        android:progress="@android:integer/config_mediumAnimTime"
+        android:progressTint="@color/lightgreen"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.5" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

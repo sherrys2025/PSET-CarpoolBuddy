@@ -54,7 +54,7 @@
         app:layout_constraintTop_toBottomOf="@+id/userTypeSettings" />
 
     <TextView
-        android:id="@+id/uidSettings"
+        android:id="@+id/uidSettingsLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
@@ -104,7 +104,7 @@
         app:layout_constraintTop_toBottomOf="@+id/userTypeSettings2" />
 
     <TextView
-        android:id="@+id/numOfVehiclesSettings6"
+        android:id="@+id/uidSettings"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="36dp"
@@ -112,8 +112,8 @@
         android:textColor="#ECECEC"
         android:textSize="16sp"
         android:textStyle="italic"
-        app:layout_constraintBottom_toBottomOf="@+id/uidSettings"
-        app:layout_constraintStart_toEndOf="@+id/uidSettings" />
+        app:layout_constraintBottom_toBottomOf="@+id/uidSettingsLabel"
+        app:layout_constraintStart_toEndOf="@+id/uidSettingsLabel" />
 
     <TextView
         android:id="@+id/numOfVehiclesSettings4"
@@ -136,8 +136,8 @@
         android:textColor="@color/white"
         android:textSize="16sp"
         android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="@+id/uidSettings"
-        app:layout_constraintTop_toBottomOf="@+id/uidSettings" />
+        app:layout_constraintStart_toStartOf="@+id/uidSettingsLabel"
+        app:layout_constraintTop_toBottomOf="@+id/uidSettingsLabel" />
 
     <Spinner
         android:id="@+id/spinner2"

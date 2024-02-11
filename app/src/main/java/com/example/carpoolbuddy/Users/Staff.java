@@ -33,4 +33,8 @@ public class Staff extends User {
         changeAllValues(name, location, pic);
         setInSchoolTitle(inSchoolTitle);
     }
+
+    public String getInSchoolTitle() {
+        return inSchoolTitle;
+    }
 }

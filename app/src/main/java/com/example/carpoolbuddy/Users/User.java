@@ -21,7 +21,6 @@ public class User{
         uid = "XXXXXXXXX";
         name = "user name";
         email = "email@cis.edu.hk";
-
         profilePic = "profilepicture.png";
         setUp = false;
         ownedVehicles = new ArrayList<>();

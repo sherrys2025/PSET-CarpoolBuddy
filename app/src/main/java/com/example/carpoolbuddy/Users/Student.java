@@ -28,4 +28,8 @@ public class Student extends User {
         changeAllValues(name, location, pic);
         this.graduatingYear = graduatingYear;
     }
+
+    public int getGraduatingYear() {
+        return graduatingYear;
+    }
 }

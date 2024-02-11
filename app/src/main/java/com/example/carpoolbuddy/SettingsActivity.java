@@ -1,12 +1,12 @@
 package com.example.carpoolbuddy;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.drawable.Icon;
-import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -16,20 +16,22 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.carpoolbuddy.Users.Alum;
 import com.example.carpoolbuddy.Users.Staff;
 import com.example.carpoolbuddy.Users.Student;
 import com.example.carpoolbuddy.Users.User;
-import com.google.android.gms.tasks.OnCanceledListener;
 import com.google.android.material.imageview.ShapeableImageView;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-
-import java.net.URI;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 public class SettingsActivity extends AppCompatActivity {
     private ShapeableImageView profilePic;
@@ -37,22 +39,21 @@ public class SettingsActivity extends AppCompatActivity {
     private Student studentUser;
     private Staff staffUser;
     private Alum alumUser;
-    private String userId;
+    private String userId, image;
     private FirebaseFirestore firestore;
-    private EditText name;
-    private EditText locationOfUser;
+    private FirebaseStorage firebaseStorage;
+    private StorageReference storageReference;
+    private EditText name, locationOfUser, uniqueField, location;
+    private TextView uniqueFieldLabel, errorMsg, email, userTypeLabel, uniqueIdLabel, uniqueId,
+            userType, numOfVehiclesLabel, numOfVehicles, locationLabel;
 
-    private EditText uniqueField;
-    private TextView uniqueFieldLabel;
-
-    private TextView errorMsg;
-
-    private String debuggingMessage;
-    private String image;
-
+    private ShapeableImageView editImage;
     private ImageButton returnButton;
-    private Button updateAll;
-    private TextView email;
+    private ImageView editIcon;
+    private Button logOutButton, updateAll;
+    private ProgressBar progressBar;
+    private View[] listOfViews;
+    private Uri imageUri;
 
     private final int GALLERY_INT_REQ_CODE = 1000;
 
@@ -62,58 +63,40 @@ public class SettingsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
 
-        firestore = FirebaseFirestore.getInstance();
-        profilePic = findViewById(R.id.profilePicSettings);
-
-
-        userId = getIntent().getStringExtra("uid");
-        System.out.println("Uid: " + userId);
-        debuggingMessage = "it never ran";
-        findUser();
-
-
-        if (studentUser == null && alumUser == null && staffUser == null) {
-            System.out.println("oh no, to object didn't work");
-        } else {
-            System.out.println("one of them is set up");
-        }
-
-        if (user == null){
-            System.out.println("user is null");
-        } else {
-            System.out.println("user is not null");
-            setProfilePic(user.getProfilePic());
-        }
+        progressBar = findViewById(R.id.progressBarSettings);
 
         name = findViewById(R.id.nameSettingEdit);
         locationOfUser = findViewById(R.id.locationSettings2);
         uniqueField = findViewById(R.id.uniqueSettings2);
         uniqueFieldLabel = findViewById(R.id.uniqueSettings);
-        errorMsg = findViewById(R.id.errorMsg);
+        errorMsg = findViewById(R.id.errorMsgSettings);
         returnButton = findViewById(R.id.backButtonSettings);
         updateAll = findViewById(R.id.update);
         email = findViewById(R.id.emailSetting);
-//        if (!user.isSetUp()) {
-//            returnButton.setVisibility(View.GONE);
-//            updateAll.setText("Create Profile");
-//        } else {
-//            returnButton.setVisibility(View.VISIBLE);
-//            updateAll.setText("Update Profile");
-//        }
-//        switch (user.getUserType()) {
-//            case "Student":
-//                uniqueFieldLabel.setText("Graduating Year:");
-//                break;
-//            case "Alum":
-//                uniqueFieldLabel.setText("Graduate Year:");
-//                break;
-//            default:
-//                uniqueFieldLabel.setText("In School Title:");
-//        }
-//
-//        email.setText(user.getEmail());
+        logOutButton = findViewById(R.id.logOutSettings);
+        userTypeLabel = findViewById(R.id.userTypeSettings2);
+        profilePic = findViewById(R.id.profilePicSettings);
+        uniqueId = findViewById(R.id.uidSettings);
+        uniqueIdLabel = findViewById(R.id.uidSettingsLabel);
+        editImage = findViewById(R.id.editSettings);
+        userType = findViewById(R.id.userTypeSettings);
+        numOfVehicles = findViewById(R.id.numOfVehiclesSettings);
+        numOfVehiclesLabel = findViewById(R.id.numOfVehiclesSettings2);
+        editIcon = findViewById(R.id.imageView3);
+        locationLabel = findViewById(R.id.locationSettings);
+        location = findViewById(R.id.locationSettings2);
+        listOfViews = new View[]{name, locationOfUser, uniqueField, uniqueFieldLabel, errorMsg, returnButton, updateAll, email,
+                logOutButton, userTypeLabel, profilePic, uniqueId, uniqueIdLabel, editImage, userType, numOfVehicles, numOfVehiclesLabel
+        , editIcon, locationLabel, location};
 
+        setInvisible();
 
+        firestore = FirebaseFirestore.getInstance();
+        firebaseStorage = FirebaseStorage.getInstance();
+        storageReference = firebaseStorage.getReference();
+
+        userId = getIntent().getStringExtra("uid");
+        findUser();
 
     }
 
@@ -121,18 +104,25 @@ public class SettingsActivity extends AppCompatActivity {
         DocumentReference docRef = firestore.collection("users").document(userId);
         docRef.get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
-                System.out.println("cici success!!!!!!!");
                 DocumentSnapshot document = task.getResult();
                 if (document.exists()) {
                     user = document.toObject(User.class);
-                    System.out.println(user.getEmail());
-                    if (user != null) {
-                        System.out.println("success!!!!!!!");
+                        switch (user.getUserType()) {
+                        case "Student":
+                            studentUser = document.toObject(Student.class);
+                            user = studentUser;
+                            break;
+                        case "Alum":
+                            alumUser = document.toObject(Alum.class);
+                            user = alumUser;
+                            break;
+                        default:
+                            staffUser = document.toObject(Staff.class);
+                            user = staffUser;
+                          }
 
                         name.setText(user.getName());
-                    } else {
-                        Log.d("TAG", "User document does not contain valid data");
-                    }
+                        setFields();
                 } else {
                     Log.d("TAG", "User document does not exist");
                 }
@@ -140,63 +130,77 @@ public class SettingsActivity extends AppCompatActivity {
                 Log.d("TAG", "Error retrieving user document: " + task.getException());
             }
         });
-
-        System.out.println("firebase: "+firestore);
-
-//        DocumentReference docRef = firestore.collection("users").document(userId);
-//        docRef.get().addOnCompleteListener(task -> {
-//            System.out.println("printed");
-//            if (task.isSuccessful()){
-//                DocumentSnapshot document = task.getResult();
-//                if (document.exists()) {
-//                    User user1 = document.toObject(User.class);
-//                    System.out.println("the user: " + user1.toString());
-//                    switch (user1.getUserType()) {
-//                        case "Student":
-//                            studentUser = document.toObject(Student.class);
-//                            user = studentUser;
-//                            break;
-//                        case "Alum":
-//                            alumUser = document.toObject(Alum.class);
-//                            user = alumUser;
-//                            break;
-//                        default:
-//                            staffUser = document.toObject(Staff.class);
-//                            user = staffUser;
-//                          }
-//                    }
-//                } else {
-//                    System.out.println("ELSE");
-//            }
-        //});
-//        System.out.println("end");
-
     }
 
-    private void setProfilePic(String uri){
-        image = uri;
-        profilePic.setImageURI(Uri.parse(image));
+    private void setFields(){
+        logOutButton.setVisibility(View.VISIBLE);
+        if (!user.isSetUp()) {
+            returnButton.setVisibility(View.INVISIBLE);
+            updateAll.setText("Create Profile");
+        } else {
+            returnButton.setVisibility(View.VISIBLE);
+            updateAll.setText("Update Profile");
+        }
+        switch (user.getUserType()) {
+            case "Student":
+                setFieldsHelper(studentUser);
+                break;
+            case "Alum":
+                setFieldsHelper(alumUser);
+                break;
+            default:
+                setFieldsHelper(staffUser);
+        }
+
+        email.setText(user.getEmail());
+        uniqueId.setText(user.getUid());
+        numOfVehicles.setText(Integer.toString(user.getOwnedVehicles().size()));
+        setVisible();
     }
+
+    private void setFieldsHelper(Student user){
+        userTypeLabel.setText("Student");
+        uniqueFieldLabel.setText("Graduating Year:");
+        uniqueField.setText(Integer.toString(studentUser.getGraduatingYear()));
+    }
+
+    private void setFieldsHelper(Alum user){
+        userTypeLabel.setText("Alum");
+        uniqueFieldLabel.setText("Graduate Year:");
+        uniqueField.setText(Integer.toString(alumUser.getGraduateYear()));
+    }
+
+    private void setFieldsHelper(Staff user){
+        uniqueFieldLabel.setText("In School Title:");
+        uniqueField.setText(staffUser.getInSchoolTitle());
+    }
+
 
     public void uploadPic(View v){
-        Intent iGallery = new Intent(Intent.ACTION_PICK);
-        iGallery.setData(MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        startActivity(iGallery, GALLERY_INT_REQ_CODE);
-    }
-
-    private void startActivity(Intent iGallery, int galleryIntReqCode) {
+        choosePicture();
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
-        if(resultCode == RESULT_OK){
-            if(requestCode == GALLERY_INT_REQ_CODE){
-                setProfilePic(String.valueOf(data.getData()));
-            }
+        if (requestCode == 1 && resultCode == RESULT_OK && data != null && data.getData()!=null) {
+            imageUri = data.getData();
+            profilePic.setImageURI(imageUri);
+            uploadPicture();
         }
     }
+
+    private void uploadPicture() {
+
+    }
+
+    private void choosePicture() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(intent, 1);
+    }
+
 
     public void updateAllSettings(View v){
         user.setSetUp(true);
@@ -206,22 +210,12 @@ public class SettingsActivity extends AppCompatActivity {
 
         switch (user.getUserType()) {
             case "Student":
-                try{
-                    int valueOfUnique = Integer.parseInt(unique);
-                    studentUser.changeValues(newName, location, valueOfUnique, image);
-                    updateFirebase(studentUser);
-                } catch (NumberFormatException e){
-                    errorMessage("Please re-enter your Graduating Year");
+                if (!updateAllSettingsStudent(newName, location, unique)) {
                     return;
                 }
                 break;
             case "Alum":
-                try{
-                    int valueOfUnique = Integer.parseInt(unique);
-                    alumUser.changeValues(newName, location, valueOfUnique, image);
-                    updateFirebase(alumUser);
-                } catch (NumberFormatException e){
-                    errorMessage("Please re-enter your Graduate Year");
+                if (!updateAllSettingsAlum(newName, location, unique)) {
                     return;
                 }
                 break;
@@ -230,6 +224,32 @@ public class SettingsActivity extends AppCompatActivity {
                 updateFirebase(staffUser);
         }
 
+        Toast.makeText(SettingsActivity.this, "Saved", Toast.LENGTH_SHORT).show();
+        returnToProfile();
+    }
+
+    private boolean updateAllSettingsStudent(String newName, String location, String unique){
+        try{
+            int valueOfUnique = Integer.parseInt(unique);
+            studentUser.changeValues(newName, location, valueOfUnique, image);
+            updateFirebase(studentUser);
+            return true;
+        } catch (NumberFormatException e){
+            errorMessage("Please re-enter your Graduating Year");
+            return false;
+        }
+    }
+
+    private boolean updateAllSettingsAlum(String newName, String location, String unique){
+        try{
+            int valueOfUnique = Integer.parseInt(unique);
+            alumUser.changeValues(newName, location, valueOfUnique, image);
+            updateFirebase(alumUser);
+            return true;
+        } catch (NumberFormatException e){
+            errorMessage("Please re-enter your Graduate Year");
+            return false;
+        }
     }
 
     private void updateFirebase(Student user){
@@ -266,11 +286,23 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     public void logOut(View v) {
-        FirebaseAuth.getInstance().signOut();
-        if (AuthActivity.mGoogleSignInClient!=null) {
-            AuthActivity.mGoogleSignInClient.signOut();
-        }
-        logOutInstance();
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Log out");
+        builder.setMessage("Are you sure you want to log out?");
+
+        builder.setPositiveButton("Yes", (dialog, which) -> {
+            FirebaseAuth.getInstance().signOut();
+            if (AuthActivity.mGoogleSignInClient!=null) {
+                AuthActivity.mGoogleSignInClient.signOut();
+            }
+
+            logOutInstance();
+        });
+
+        builder.setNegativeButton("No", (dialog, which) -> {
+        });
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
     }
 
     public void errorMessage(String message){
@@ -281,4 +313,29 @@ public class SettingsActivity extends AppCompatActivity {
         Intent intent = new Intent(this, AuthActivity.class);
         startActivity(intent);
     }
+
+    public void backToMain(View v) {
+        returnToProfile();
+    }
+
+    private void returnToProfile(){
+        Intent intent = new Intent(this, VehicleProfileActivity.class);
+        intent.putExtra("uid", user.getUid());
+        startActivity(intent);
+    }
+
+    private void setInvisible(){
+        for (View v: listOfViews) {
+            v.setVisibility(View.INVISIBLE);
+        }
+        progressBar.animate();
+    }
+
+    private void setVisible(){
+        for (View v: listOfViews) {
+            v.setVisibility(View.VISIBLE);
+        }
+        progressBar.setVisibility(View.INVISIBLE);
+    }
+
 }

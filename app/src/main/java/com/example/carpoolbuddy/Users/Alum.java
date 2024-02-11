@@ -28,4 +28,8 @@ public class Alum extends User {
         changeAllValues(name, location, pic);
         this.graduateYear = graduateYear;
     }
+
+    public int getGraduateYear() {
+        return graduateYear;
+    }
 }
