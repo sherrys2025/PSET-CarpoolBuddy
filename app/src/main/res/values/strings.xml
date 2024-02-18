@@ -2,6 +2,11 @@
     <string name="app_name">Carpool Buddy</string>
     <string name="default_web_client_id">524145365621-3ctkbchhuo0c91rh3ek02p7bhq9oc2eh.apps.googleusercontent.com</string>
     <string name="title_activity_settings">SettingsActivity</string>
+    <string-array name="types_of_vehicles">
+        <item>Car</item>
+        <item>Electric Car</item>
+        <item>Motorcycle</item>
+    </string-array>
 
     <!-- Preference Titles -->
     <string name="messages_header">Messages</string>

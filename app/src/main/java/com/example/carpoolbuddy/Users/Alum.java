@@ -24,8 +24,8 @@ public class Alum extends User {
         this.graduateYear = 2023;
     }
 
-    public void changeValues(String name, String location, int graduateYear, String pic){
-        changeAllValues(name, location, pic);
+    public void changeValues(String name, int graduateYear, String phoneNumber){
+        changeAllValues(name, phoneNumber);
         this.graduateYear = graduateYear;
     }
 

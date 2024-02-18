@@ -8,7 +8,23 @@
     tools:context=".ViewVehicleActivity">
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/addVehicle"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="32dp"
+        android:clickable="true"
+        android:cropToPadding="false"
+        android:onClick="toVehicle"
+        android:rotation="90"
+        android:scaleType="fitStart"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/baseline_add_circle_24"
+        app:tint="@color/lightgreen" />
+
+    <ImageView
+        android:id="@+id/imageView8"
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:adjustViewBounds="false"
@@ -17,77 +33,64 @@
         android:scaleType="fitXY"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:srcCompat="@android:drawable/divider_horizontal_dark" />
 
     <ImageButton
-        android:id="@+id/imageButton2"
-        android:layout_width="56dp"
-        android:layout_height="53dp"
-        android:layout_marginStart="68dp"
-        android:layout_marginTop="5dp"
+        android:id="@+id/ViewVehiclesButton"
+        android:layout_width="40dp"
+        android:layout_height="38dp"
+        android:layout_marginBottom="10dp"
         android:background="#00FFFFFF"
-        android:backgroundTint="@color/white"
-        android:backgroundTintMode="multiply"
-        android:foreground="@android:drawable/ic_menu_my_calendar"
-        android:foregroundTint="@color/white"
-        android:foregroundTintMode="multiply"
         android:scaleType="fitXY"
-        android:tintMode="multiply"
-        app:layout_constraintStart_toEndOf="@+id/floatingActionButton2"
-        app:layout_constraintTop_toTopOf="@+id/imageView"
-        app:srcCompat="@android:drawable/ic_menu_my_calendar"
-        app:tint="@color/white" />
+        android:src="@drawable/baseline_directions_car_24"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:tint="@color/midgreen" />
 
     <ImageButton
-        android:id="@+id/imageButton5"
+        android:id="@+id/DashboardButton"
         android:layout_width="38dp"
         android:layout_height="38dp"
         android:layout_marginEnd="68dp"
         android:layout_marginBottom="10dp"
         android:background="#00FFFFFF"
+        android:onClick="toExplore"
         android:scaleType="fitXY"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/floatingActionButton2"
+        app:layout_constraintEnd_toStartOf="@+id/ViewVehiclesButton"
         app:srcCompat="@drawable/dashboard"
-        app:tint="#D1D1D1" />
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/floatingActionButton2"
-        android:layout_width="71dp"
-        android:layout_height="56dp"
-        android:clickable="true"
-        android:src="@android:drawable/ic_input_add"
-        app:backgroundTint="@color/lightgreen"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:tint="@color/white" />
 
     <ImageButton
-        android:id="@+id/backButtonSettings2"
-        android:layout_width="80dp"
-        android:layout_height="71dp"
-        android:layout_marginStart="13dp"
-        android:layout_marginTop="17dp"
-        android:backgroundTint="#00FFFFFF"
+        android:id="@+id/BookingButton"
+        android:layout_width="40dp"
+        android:layout_height="38dp"
+        android:layout_marginStart="63dp"
+        android:background="#00FFFFFF"
+        android:backgroundTint="@color/white"
+        android:backgroundTintMode="multiply"
+        android:foregroundTint="@color/white"
+        android:foregroundTintMode="multiply"
         android:scaleType="fitXY"
         android:tintMode="multiply"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@android:drawable/ic_menu_revert"
-        app:tint="@color/lightgreen" />
+        app:layout_constraintStart_toEndOf="@+id/ViewVehiclesButton"
+        app:layout_constraintTop_toTopOf="@+id/ViewVehiclesButton"
+        app:srcCompat="@drawable/baseline_edit_calendar_24"
+        app:tint="@color/white" />
 
     <EditText
-        android:id="@+id/exploreLabel2"
+        android:id="@+id/myVehiclesLabel"
         android:layout_width="230dp"
         android:layout_height="63dp"
         android:layout_marginTop="24dp"
         android:ems="10"
         android:fontFamily="sans-serif-smallcaps"
         android:inputType="text"
-        android:text="View Vehicle"
+        android:text="My Vehicles"
         android:textAlignment="center"
         android:textColor="@color/white"
         android:textSize="24sp"
@@ -97,20 +100,18 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
+    <ImageView
         android:id="@+id/SettingsViewVehicle"
-        android:layout_width="65dp"
-        android:layout_height="66dp"
-        android:layout_marginEnd="24dp"
-        android:backgroundTint="#00304236"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="32dp"
         android:onClick="toSettings"
-        app:icon="@drawable/settings"
-        app:iconSize="30dp"
-        app:iconTint="#7C974D"
-        app:layout_constraintBottom_toBottomOf="@+id/backButtonSettings2"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-
+        android:src="@drawable/settings"
+        app:layout_constraintBottom_toBottomOf="@+id/addVehicle"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="@color/lightgreen" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -29,8 +29,8 @@ public class Staff extends User {
         this.inSchoolTitle = inSchoolTitle;
     }
 
-    public void changeValues(String name, String location, String inSchoolTitle, String pic){
-        changeAllValues(name, location, pic);
+    public void changeValues(String name, String inSchoolTitle, String phoneNumber){
+        changeAllValues(name, phoneNumber);
         setInSchoolTitle(inSchoolTitle);
     }
 

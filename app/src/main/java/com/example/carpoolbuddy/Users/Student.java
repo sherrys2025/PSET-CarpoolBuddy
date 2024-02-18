@@ -24,8 +24,8 @@ public class Student extends User {
         this.graduatingYear = graduatingYear;
     }
 
-    public void changeValues(String name, String location, int graduatingYear, String pic){
-        changeAllValues(name, location, pic);
+    public void changeValues(String name, int graduatingYear, String phoneNumber){
+        changeAllValues(name, phoneNumber);
         this.graduatingYear = graduatingYear;
     }
 

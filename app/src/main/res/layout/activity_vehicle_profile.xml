@@ -25,26 +25,24 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
+    <ImageView
         android:id="@+id/SettingsViewVehicle"
-        android:layout_width="67dp"
-        android:layout_height="59dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="12dp"
-        android:backgroundTint="#00304236"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="32dp"
         android:onClick="toSettings"
-        app:icon="@drawable/settings"
-        app:iconSize="30dp"
-        app:iconTint="@color/lightgreen"
-        app:layout_constraintBottom_toBottomOf="@+id/Logo"
-        app:layout_constraintEnd_toEndOf="parent" />
+        android:src="@drawable/settings"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="@color/lightgreen" />
 
     <ImageView
         android:id="@+id/Logo"
         android:layout_width="87dp"
         android:layout_height="89dp"
-        android:layout_marginStart="4dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="4dp"
         android:cropToPadding="false"
         android:rotation="90"
         android:scaleType="centerCrop"
@@ -66,20 +64,23 @@
         app:layout_constraintStart_toStartOf="parent"
         app:srcCompat="@android:drawable/divider_horizontal_dark" />
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/floatingActionButton"
-        android:layout_width="71dp"
-        android:layout_height="56dp"
-        android:clickable="true"
-        android:src="@android:drawable/ic_input_add"
-        app:backgroundTint="@color/lightgreen"
+    <ImageButton
+        android:id="@+id/ViewVehiclesButton"
+        android:layout_width="40dp"
+        android:layout_height="38dp"
+        android:layout_marginBottom="10dp"
+        android:background="#00FFFFFF"
+        android:onClick="toVehicles"
+        android:scaleType="fitXY"
+        android:src="@drawable/baseline_directions_car_24"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:tint="@color/white" />
 
     <ImageButton
-        android:id="@+id/imageButton3"
+        android:id="@+id/DashboardButton"
         android:layout_width="38dp"
         android:layout_height="38dp"
         android:layout_marginEnd="68dp"
@@ -87,26 +88,25 @@
         android:background="#00FFFFFF"
         android:scaleType="fitXY"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/floatingActionButton"
+        app:layout_constraintEnd_toStartOf="@+id/ViewVehiclesButton"
         app:srcCompat="@drawable/dashboard"
         app:tint="@color/midgreen" />
 
     <ImageButton
-        android:id="@+id/imageButton4"
-        android:layout_width="56dp"
-        android:layout_height="53dp"
+        android:id="@+id/BookingButton"
+        android:layout_width="40dp"
+        android:layout_height="38dp"
         android:layout_marginStart="63dp"
         android:background="#00FFFFFF"
         android:backgroundTint="@color/white"
         android:backgroundTintMode="multiply"
-        android:foreground="@android:drawable/ic_menu_my_calendar"
         android:foregroundTint="@color/white"
         android:foregroundTintMode="multiply"
         android:scaleType="fitXY"
         android:tintMode="multiply"
-        app:layout_constraintStart_toEndOf="@+id/floatingActionButton"
-        app:layout_constraintTop_toTopOf="@+id/floatingActionButton"
-        app:srcCompat="@android:drawable/ic_menu_my_calendar"
+        app:layout_constraintStart_toEndOf="@+id/ViewVehiclesButton"
+        app:layout_constraintTop_toTopOf="@+id/ViewVehiclesButton"
+        app:srcCompat="@drawable/baseline_edit_calendar_24"
         app:tint="@color/white" />
 
     <androidx.recyclerview.widget.RecyclerView

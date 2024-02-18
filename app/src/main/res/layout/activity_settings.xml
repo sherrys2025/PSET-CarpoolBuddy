@@ -7,253 +7,307 @@
     android:background="@color/darkgreen"
     tools:context=".SettingsActivity">
 
-
-    <com.google.android.material.imageview.ShapeableImageView
-        android:id="@+id/profilePicSettings"
-        android:layout_width="74dp"
-        android:layout_height="74dp"
-        android:layout_marginTop="78dp"
-        android:onClick="uploadPic"
-        android:outlineProvider="none"
-        android:scaleType="centerCrop"
-        app:layout_constraintStart_toStartOf="@+id/editSettings"
-        app:layout_constraintTop_toTopOf="parent"
-        app:shapeAppearanceOverlay="@style/circleImageView"
-        app:srcCompat="@drawable/profilepicture" />
-
-    <com.google.android.material.imageview.ShapeableImageView
-        android:id="@+id/editSettings"
-        android:layout_width="74dp"
-        android:layout_height="74dp"
-        android:clickable="true"
-        android:onClick="uploadPic"
-        android:outlineProvider="background"
-        android:scaleType="centerInside"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/profilePicSettings"
-        app:shapeAppearanceOverlay="@style/circleImageView"
-        app:srcCompat="@drawable/edit" />
-
-    <EditText
-        android:id="@+id/nameSettingEdit"
-        android:layout_width="300dp"
-        android:layout_height="52dp"
-        android:autoLink="none"
-        android:ems="10"
-        android:inputType="text"
-        android:text="Name"
-        android:textAlignment="center"
-        android:textColor="@color/white"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/profilePicSettings" />
-
-    <TextView
-        android:id="@+id/emailSetting"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="email@cis.edu.hk"
-        android:textAlignment="center"
-        android:textColor="@color/white"
-        android:textSize="16sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/nameSettingEdit" />
-
-    <Button
-        android:id="@+id/update"
-        android:layout_width="300dp"
-        android:layout_height="54dp"
-        android:layout_marginBottom="57dp"
-        android:backgroundTint="#75A63B"
-        android:fontFamily="sans-serif-medium"
-        android:insetTop="2dp"
-        android:insetBottom="2dp"
-        android:onClick="updateAllSettings"
-        android:text="Update Profile"
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="3dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent" />
+        tools:layout_editor_absoluteX="-3dp">
 
-    <ImageView
-        android:id="@+id/imageView3"
-        android:layout_width="36dp"
-        android:layout_height="53dp"
-        app:layout_constraintBottom_toBottomOf="@+id/nameSettingEdit"
-        app:layout_constraintEnd_toEndOf="@+id/nameSettingEdit"
-        app:srcCompat="@android:drawable/ic_menu_edit" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-    <ImageButton
-        android:id="@+id/backButtonSettings"
-        android:layout_width="80dp"
-        android:layout_height="71dp"
-        android:layout_marginStart="13dp"
-        android:layout_marginTop="17dp"
-        android:backgroundTint="#00FFFFFF"
-        android:onClick="backToMain"
-        android:scaleType="fitXY"
-        android:tintMode="multiply"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@android:drawable/ic_menu_revert"
-        app:tint="@color/lightgreen" />
+            <Button
+                android:id="@+id/logOutSettings"
+                android:layout_width="118dp"
+                android:layout_height="53dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginEnd="16dp"
+                android:backgroundTint="#75A63B"
+                android:onClick="logOut"
+                android:text="Log out"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/userTypeSettings2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="36dp"
-        android:text="Staff"
-        android:textColor="#ECECEC"
-        android:textSize="16sp"
-        android:textStyle="italic"
-        app:layout_constraintBottom_toBottomOf="@+id/userTypeSettings"
-        app:layout_constraintStart_toEndOf="@+id/userTypeSettings" />
+            <ImageButton
+                android:id="@+id/backButtonSettings"
+                android:layout_width="92dp"
+                android:layout_height="76dp"
+                android:layout_marginTop="5dp"
+                android:backgroundTint="#00FFFFFF"
+                android:onClick="backToMain"
+                android:scaleType="fitXY"
+                android:tintMode="multiply"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@android:drawable/ic_menu_revert"
+                app:tint="@color/lightgreen" />
 
-    <TextView
-        android:id="@+id/userTypeSettings"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="44dp"
-        android:text="User Type: "
-        android:textColor="@color/white"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="@+id/nameSettingEdit"
-        app:layout_constraintTop_toBottomOf="@+id/emailSetting" />
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/profilePicSettings"
+                android:layout_width="85dp"
+                android:layout_height="85dp"
+                android:layout_marginTop="76dp"
+                android:onClick="uploadPic"
+                android:outlineProvider="none"
+                android:scaleType="centerCrop"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:shapeAppearanceOverlay="@style/circleImageView"
+                app:srcCompat="@drawable/profilepicture" />
 
-    <TextView
-        android:id="@+id/uniqueSettings"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:text="Graduating Year: "
-        android:textColor="@color/white"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="@+id/userTypeSettings"
-        app:layout_constraintTop_toBottomOf="@+id/userTypeSettings" />
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/editSettings"
+                android:layout_width="85dp"
+                android:layout_height="85dp"
+                android:clickable="true"
+                android:onClick="uploadPic"
+                android:outlineProvider="background"
+                android:scaleType="centerInside"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/profilePicSettings"
+                app:shapeAppearanceOverlay="@style/circleImageView"
+                app:srcCompat="@drawable/edit" />
 
-    <TextView
-        android:id="@+id/uidSettingsLabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:text="User ID:"
-        android:textColor="@color/white"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="@+id/numOfVehiclesSettings"
-        app:layout_constraintTop_toBottomOf="@+id/numOfVehiclesSettings" />
+            <TextView
+                android:id="@+id/emailSetting"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="email@cis.edu.hk"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.498"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/profilePicSettings" />
 
-    <EditText
-        android:id="@+id/locationSettings2"
-        android:layout_width="300dp"
-        android:layout_height="52dp"
-        android:drawableRight="@android:drawable/ic_menu_edit"
-        android:ems="10"
-        android:inputType="textPostalAddress"
-        android:textColor="@color/white"
-        app:layout_constraintEnd_toEndOf="@+id/update"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/locationSettings"
-        app:layout_constraintTop_toBottomOf="@+id/locationSettings" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="vertical"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/errorMsgSettings">
 
-    <TextView
-        android:id="@+id/numOfVehiclesSettings2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="36dp"
-        android:text="0"
-        android:textColor="#ECECEC"
-        android:textSize="16sp"
-        android:textStyle="italic"
-        app:layout_constraintBottom_toBottomOf="@+id/numOfVehiclesSettings"
-        app:layout_constraintStart_toEndOf="@+id/numOfVehiclesSettings" />
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/nameSettingEdit"
+                    android:layout_width="325dp"
+                    android:layout_height="wrap_content"
+                    android:autoLink="none"
+                    android:ems="10"
+                    android:hint="Name"
+                    android:inputType="text"
+                    android:textAlignment="center"
+                    android:textColor="@color/white"
+                    android:textColorHint="@color/white"
+                    android:textSize="24sp"
+                    android:textStyle="bold">
 
-    <TextView
-        android:id="@+id/numOfVehiclesSettings"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:text="Number of Vehicles: "
-        android:textColor="@color/white"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="@+id/uniqueSettings"
-        app:layout_constraintTop_toBottomOf="@+id/uniqueSettings" />
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/nameSettingEditable"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        android:text="XXXXX"
+                        android:textColor="@color/white"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="@+id/nameSettingEdit" />
 
-    <EditText
-        android:id="@+id/uniqueSettings2"
-        android:layout_width="129dp"
-        android:layout_height="43dp"
-        android:layout_marginStart="36dp"
-        android:layout_marginTop="24dp"
-        android:drawableRight="@android:drawable/ic_menu_edit"
-        android:text="2024"
-        android:textColor="#ECECEC"
-        android:textSize="16sp"
-        android:textStyle="italic"
-        app:layout_constraintEnd_toEndOf="@+id/nameSettingEdit"
-        app:layout_constraintStart_toEndOf="@+id/uniqueSettings"
-        app:layout_constraintTop_toBottomOf="@+id/userTypeSettings2" />
+                </com.google.android.material.textfield.TextInputLayout>
 
-    <TextView
-        android:id="@+id/uidSettings"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:text="XXXXXXXXXXXXXX"
-        android:textColor="#ECECEC"
-        android:textSize="16sp"
-        android:textStyle="italic"
-        app:layout_constraintBottom_toBottomOf="@+id/uidSettingsLabel"
-        app:layout_constraintStart_toEndOf="@+id/uidSettingsLabel" />
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="5dp" />
 
-    <TextView
-        android:id="@+id/locationSettings"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:text="Location: "
-        android:textColor="@color/white"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="@+id/uidSettingsLabel"
-        app:layout_constraintTop_toBottomOf="@+id/uidSettingsLabel" />
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/userTypeSettings"
+                    android:layout_width="325dp"
+                    android:layout_height="wrap_content"
+                    android:autoLink="none"
+                    android:ems="10"
+                    android:hint="User Type"
+                    android:inputType="none"
+                    android:textAlignment="center"
+                    android:textColor="@color/white"
+                    android:textColorHint="@color/white"
+                    android:textSize="24sp"
+                    android:textStyle="bold">
 
-    <TextView
-        android:id="@+id/errorMsgSettings"
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:maxLines="4"
-        android:textColor="#FF0000"
-        app:layout_constraintBottom_toTopOf="@+id/userTypeSettings2"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.504"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/emailSetting"
-        app:layout_constraintVertical_bias="0.5" />
+                    <Space
+                        android:layout_width="match_parent"
+                        android:layout_height="5dp"
+                        android:layout_weight="1" />
 
-    <Button
-        android:id="@+id/logOutSettings"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="8dp"
-        android:backgroundTint="#75A63B"
-        android:onClick="logOut"
-        android:text="Log out"
-        app:layout_constraintBottom_toBottomOf="@+id/backButtonSettings"
-        app:layout_constraintEnd_toEndOf="parent" />
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/userTypeDisplaySettings"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        android:enabled="false"
+                        android:inputType="none"
+                        android:text="staff"
+                        android:textColor="@color/lightgray"
+                        android:textSize="16sp" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/phoneNumberSettings"
+                    android:layout_width="325dp"
+                    android:layout_height="wrap_content"
+                    android:autoLink="none"
+                    android:ems="10"
+                    android:hint="Phone Number"
+                    android:inputType="phone"
+                    android:textAlignment="center"
+                    android:textColor="@color/white"
+                    android:textColorHint="@color/white"
+                    android:textSize="24sp"
+                    android:textStyle="bold">
+
+                    <Space
+                        android:layout_width="match_parent"
+                        android:layout_height="5dp"
+                        android:layout_weight="1" />
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/phoneNumberSettingsEditable"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        android:inputType="phone"
+                        android:text="12345678"
+                        android:textColor="@color/white"
+                        android:textSize="16sp" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/uniqueFieldSettings"
+                    android:layout_width="325dp"
+                    android:layout_height="wrap_content"
+                    android:autoLink="none"
+                    android:ems="10"
+                    android:hint="Unique Field"
+                    android:inputType="text"
+                    android:textAlignment="center"
+                    android:textColor="@color/white"
+                    android:textColorHint="@color/white"
+                    android:textSize="24sp"
+                    android:textStyle="bold">
+
+                    <Space
+                        android:layout_width="match_parent"
+                        android:layout_height="5dp"
+                        android:layout_weight="1" />
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/uniqueFieldSettingsEditable"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        android:text="2024"
+                        android:textColor="@color/white"
+                        android:textSize="16sp" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/numberOfVehiclesSettings"
+                    android:layout_width="325dp"
+                    android:layout_height="wrap_content"
+                    android:autoLink="none"
+                    android:ems="10"
+                    android:hint="Number of Vehicles"
+                    android:inputType="none"
+                    android:textAlignment="center"
+                    android:textColor="@color/white"
+                    android:textColorHint="@color/white"
+                    android:textSize="24sp"
+                    android:textStyle="bold">
+
+                    <Space
+                        android:layout_width="match_parent"
+                        android:layout_height="5dp"
+                        android:layout_weight="1" />
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/numberOfVehiclesSettingsDisplay"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        android:enabled="false"
+                        android:inputType="none"
+                        android:text="0"
+                        android:textColor="@color/lightgray"
+                        android:textSize="16sp" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/userIdSettings"
+                    android:layout_width="325dp"
+                    android:layout_height="wrap_content"
+                    android:autoLink="none"
+                    android:ems="10"
+                    android:hint="User ID"
+                    android:inputType="none"
+                    android:textAlignment="center"
+                    android:textColor="@color/white"
+                    android:textColorHint="@color/white"
+                    android:textSize="24sp"
+                    android:textStyle="bold">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/userIdSettingsDisplay"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        android:enabled="false"
+                        android:inputType="none"
+                        android:text="XXXXXXXXXXXXXXXXXXXXXX"
+                        android:textColor="@color/lightgray"
+                        android:textSize="16sp" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="10dp" />
+
+                <Button
+                    android:id="@+id/update"
+                    android:layout_width="300dp"
+                    android:layout_height="54dp"
+                    android:backgroundTint="#75A63B"
+                    android:fontFamily="sans-serif-medium"
+                    android:insetTop="2dp"
+                    android:insetBottom="2dp"
+                    android:onClick="updateAllSettings"
+                    android:text="Update Profile" />
+
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="20dp" />
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/errorMsgSettings"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:gravity="center"
+                android:maxLines="4"
+                android:textColor="#FF0000"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/emailSetting" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
 
     <ProgressBar
         android:id="@+id/progressBarSettings"

@@ -12,19 +12,22 @@ import java.util.UUID;
 public class Car extends Vehicle {
     private String carModel;
 
-    public Car(User user, String model, int capacity, double basePrice, DateTime date, String carModel){
-        super(user, model, capacity, basePrice, date);
-        owner = user.getUid();
-        this.model = model;
-        this.capacity = capacity;
-        vehicleID = UUID.randomUUID().toString();
-        ridersUIDs = new ArrayList<>();
-        ridersUIDs.add(owner);
-        open = true;
-        this.basePrice = basePrice;
-        this.date = date;
-        //route = new Route(user.getLocation());
+    public Car(){
+        super();
+        this.carModel = " ";
+    }
+
+    public Car(User user){
+        super(user);
+        this.carModel = " ";
+    }
+
+    public Car(User user, String model, String title, int capacity, String carModel, boolean isSetUp){
+        super(user, model, title, capacity, isSetUp);
         this.carModel = carModel;
     }
 
+    public String getCarModel() {
+        return carModel;
+    }
 }

@@ -10,21 +10,24 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 public class ElectricCar extends Vehicle {
-    private String carModel;
+    private String eCarModel;
 
-    public ElectricCar(User user, String model, int capacity, double basePrice, DateTime date, String carModel){
-        super(user, model, capacity, basePrice, date);
-        owner = user.getUid();
-        this.model = model;
-        this.capacity = capacity;
-        vehicleID = UUID.randomUUID().toString();
-        ridersUIDs = new ArrayList<>();
-        ridersUIDs.add(owner);
-        open = true;
-        this.basePrice = basePrice;
-        this.date = date;
-        //route = new Route(user.getLocation());
-        this.carModel = carModel;
+    public ElectricCar(){
+        super();
+        eCarModel = " ";
     }
 
+    public ElectricCar(User user){
+        super(user);
+        eCarModel = " ";
+    }
+
+    public ElectricCar(User user, String model, String title, int capacity, String carModel, boolean isSetUp){
+        super(user, model, title, capacity, isSetUp);
+        this.eCarModel = carModel;
+    }
+
+    public String getECarModel() {
+        return eCarModel;
+    }
 }

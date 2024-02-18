@@ -1,0 +1,355 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/darkgreen"
+    tools:context=".AddNewVehicleActivity">
+
+    <ProgressBar
+        android:id="@+id/progressBarVehicle"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="124dp"
+        android:layout_height="50dp"
+        android:indeterminate="true"
+        android:indeterminateTint="@color/lightgreen"
+        android:max="@integer/material_motion_duration_medium_1"
+        android:progress="@android:integer/config_mediumAnimTime"
+        android:progressTint="@color/lightgreen"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.5" />
+
+    <ScrollView
+        android:id="@+id/everythingVehicle"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageButton
+                android:id="@+id/backButtonVehicle"
+                android:layout_width="92dp"
+                android:layout_height="76dp"
+                android:backgroundTint="#00FFFFFF"
+                android:onClick="backToVehicles"
+                android:scaleType="fitXY"
+                android:tintMode="multiply"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@android:drawable/ic_menu_revert"
+                app:tint="@color/lightgreen" />
+
+            <TextView
+                android:id="@+id/editVehicleLabel"
+                android:layout_width="234dp"
+                android:layout_height="34dp"
+                android:layout_marginTop="40dp"
+                android:ems="10"
+                android:fontFamily="sans-serif-smallcaps"
+                android:text="My Vehicle"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/vehicleImage"
+                android:layout_width="415dp"
+                android:layout_height="230dp"
+                android:layout_marginTop="16dp"
+                android:clickable="true"
+                android:onClick="uploadPic"
+                app:layout_constraintTop_toBottomOf="@+id/editVehicleLabel"
+                app:srcCompat="@drawable/cardefaultpic"
+                tools:layout_editor_absoluteX="0dp" />
+
+            <ImageView
+                android:id="@+id/deleteImageVehicle"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:alpha="255"
+                android:clickable="true"
+                android:onClick="deleteImage"
+                android:src="@android:drawable/btn_dialog"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/editVehicleLabel"
+                app:srcCompat="@drawable/baseline_delete_forever_24"
+                app:tint="#EC3A3A" />
+
+            <TextView
+                android:id="@+id/textView7"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_marginTop="5dp"
+                android:text="Click to upload"
+                android:textColor="@color/white"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/vehicleImage" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                android:orientation="vertical"
+                app:layout_constraintTop_toBottomOf="@+id/textView7"
+                tools:layout_editor_absoluteX="16dp">
+
+                <TextView
+                    android:id="@+id/errorMsgVehicle"
+                    android:layout_width="300dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:gravity="center"
+                    android:maxLines="4"
+                    android:textColor="#FF0000" />
+
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="5dp" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/titleVehicle"
+                    android:layout_width="325dp"
+                    android:layout_height="wrap_content"
+                    android:autoLink="none"
+                    android:ems="10"
+                    android:hint="Title"
+                    android:inputType="text"
+                    android:textAlignment="center"
+                    android:textColor="@color/white"
+                    android:textColorHint="@color/white"
+                    android:textSize="24sp"
+                    android:textStyle="bold">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/titleVehicleEdit"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        android:textColor="@color/white"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="@+id/nameSettingEdit" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="5dp" />
+
+                <TextView
+                    android:id="@+id/typeOfVehicle"
+                    android:layout_width="300dp"
+                    android:layout_height="wrap_content"
+                    android:text="Type of Vehicle"
+                    android:textColor="@color/white" />
+
+                <Spinner
+                    android:id="@+id/typeOfVehicleEdit"
+                    style="@style/Widget.AppCompat.Light.Spinner.DropDown.ActionBar"
+                    android:layout_width="300dp"
+                    android:layout_height="50dp"
+                    android:backgroundTint="@color/white"
+                    />
+
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="5dp" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/specialVehicle"
+                    android:layout_width="325dp"
+                    android:layout_height="wrap_content"
+                    android:autoLink="none"
+                    android:ems="10"
+                    android:hint="Model"
+                    android:inputType="text"
+                    android:textAlignment="center"
+                    android:textColor="@color/white"
+                    android:textColorHint="@color/white"
+                    android:textSize="24sp"
+                    android:textStyle="bold">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/specialVehicleEdit"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        android:drawableTint="@color/white"
+                        android:inputType="text"
+                        android:text="BMW 888"
+                        android:textColor="@color/white"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="@+id/nameSettingEdit" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="5dp" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/capacityVehicle"
+                    android:layout_width="325dp"
+                    android:layout_height="wrap_content"
+                    android:autoLink="none"
+                    android:ems="10"
+                    android:hint="Capacity"
+                    android:inputType="number"
+                    android:textAlignment="center"
+                    android:textColor="@color/white"
+                    android:textColorHint="@color/white"
+                    android:textSize="24sp"
+                    android:textStyle="bold">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/capacityVehicleEdit"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        android:drawableTint="@color/white"
+                        android:inputType="number"
+                        android:text="2"
+                        android:textColor="@color/white"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="@+id/nameSettingEdit" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="5dp" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/ownerVehicle"
+                    android:layout_width="325dp"
+                    android:layout_height="wrap_content"
+                    android:autoLink="none"
+                    android:ems="10"
+                    android:hint="Owner"
+                    android:inputType="none"
+                    android:enabled="false"
+                    android:textAlignment="center"
+                    android:textColor="@color/lightgreen"
+                    android:textColorHint="@color/white"
+                    android:textSize="24sp"
+                    android:textStyle="bold">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/ownerVehicleEdit"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        android:drawableTint="@color/white"
+                        android:inputType="none"
+                        android:text="XXXXX"
+                        android:textColor="@color/lightgray"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="@+id/nameSettingEdit" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="5dp" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/uniqueIdVehicle"
+                    android:layout_width="325dp"
+                    android:layout_height="wrap_content"
+                    android:autoLink="none"
+                    android:ems="10"
+                    android:hint="Vehicle ID"
+                    android:inputType="none"
+                    android:textAlignment="center"
+                    android:textColor="@color/white"
+                    android:textColorHint="@color/white"
+                    android:textSize="24sp"
+                    android:textStyle="bold">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/uniqueIdVehicleEdit"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        android:drawableTint="@color/white"
+                        android:enabled="false"
+                        android:inputType="none"
+                        android:text="XXXXXXXXXX"
+                        android:textColor="@color/lightgray"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="@+id/nameSettingEdit" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="5dp" />
+
+                <Button
+                    android:id="@+id/updateVehicle"
+                    android:layout_width="325dp"
+                    android:layout_height="54dp"
+                    android:backgroundTint="#75A63B"
+                    android:fontFamily="sans-serif-medium"
+                    android:insetTop="2dp"
+                    android:insetBottom="2dp"
+                    android:onClick="updateAllSettings"
+                    android:text="Update Vehicle" />
+
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp" />
+
+            </LinearLayout>
+
+            <ImageButton
+                android:id="@+id/nextImageVehicle"
+                style="@android:style/Widget.Holo.Light.ImageButton"
+                android:layout_width="40dp"
+                android:layout_height="60dp"
+                android:layout_marginEnd="16dp"
+                android:alpha="100"
+                android:onClick="nextImage"
+                android:rotation="270"
+                android:scaleType="centerInside"
+                android:src="@android:drawable/arrow_down_float"
+                app:layout_constraintEnd_toEndOf="@+id/vehicleImage"
+                app:layout_constraintTop_toBottomOf="@+id/vehicleImage"
+                app:srcCompat="@drawable/baseline_arrow_right_24"
+                app:tint="@color/lightgreen" />
+
+            <ImageButton
+                android:id="@+id/prevImageVehicle"
+                style="@android:style/Widget.Holo.Light.ImageButton"
+                android:layout_width="40dp"
+                android:layout_height="60dp"
+                android:layout_marginStart="16dp"
+                android:alpha="100"
+                android:onClick="prevImage"
+                android:rotation="90"
+                android:scaleType="centerInside"
+                android:src="@android:drawable/arrow_down_float"
+                app:layout_constraintStart_toStartOf="@+id/vehicleImage"
+                app:layout_constraintTop_toBottomOf="@+id/vehicleImage"
+                app:srcCompat="@drawable/baseline_arrow_right_24"
+                app:tint="@color/lightgreen" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>
