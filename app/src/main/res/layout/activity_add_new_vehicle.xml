@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/darkgreen"
-    tools:context=".AddNewVehicleActivity">
+    tools:context=".Activity.AddNewVehicle.AddNewVehicleActivity">
 
     <ProgressBar
         android:id="@+id/progressBarVehicle"
@@ -167,8 +167,7 @@
                     style="@style/Widget.AppCompat.Light.Spinner.DropDown.ActionBar"
                     android:layout_width="300dp"
                     android:layout_height="50dp"
-                    android:backgroundTint="@color/white"
-                    />
+                    android:backgroundTint="@color/white" />
 
                 <Space
                     android:layout_width="match_parent"
@@ -196,6 +195,37 @@
                         android:drawableTint="@color/white"
                         android:inputType="text"
                         android:text="BMW 888"
+                        android:textColor="@color/white"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="@+id/nameSettingEdit" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="5dp" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/plateVehicle"
+                    android:layout_width="325dp"
+                    android:layout_height="wrap_content"
+                    android:autoLink="none"
+                    android:ems="10"
+                    android:hint="Number Plate"
+                    android:inputType="text"
+                    android:textAlignment="center"
+                    android:textColor="@color/white"
+                    android:textColorHint="@color/white"
+                    android:textSize="24sp"
+                    android:textStyle="bold">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/plateVehicleEdit"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        android:drawableTint="@color/white"
+                        android:inputType="text"
+                        android:text="HK1357"
                         android:textColor="@color/white"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="@+id/nameSettingEdit" />
@@ -242,9 +272,9 @@
                     android:layout_height="wrap_content"
                     android:autoLink="none"
                     android:ems="10"
+                    android:enabled="false"
                     android:hint="Owner"
                     android:inputType="none"
-                    android:enabled="false"
                     android:textAlignment="center"
                     android:textColor="@color/lightgreen"
                     android:textColorHint="@color/white"
@@ -257,6 +287,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="8dp"
                         android:drawableTint="@color/white"
+                        android:enabled="false"
                         android:inputType="none"
                         android:text="XXXXX"
                         android:textColor="@color/lightgray"
@@ -274,6 +305,7 @@
                     android:layout_height="wrap_content"
                     android:autoLink="none"
                     android:ems="10"
+                    android:enabled="false"
                     android:hint="Vehicle ID"
                     android:inputType="none"
                     android:textAlignment="center"
@@ -308,7 +340,7 @@
                     android:fontFamily="sans-serif-medium"
                     android:insetTop="2dp"
                     android:insetBottom="2dp"
-                    android:onClick="updateAllSettings"
+                    android:onClick="updateVehicle"
                     android:text="Update Vehicle" />
 
                 <Space

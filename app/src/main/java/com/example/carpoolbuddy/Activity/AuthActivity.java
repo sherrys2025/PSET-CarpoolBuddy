@@ -1,36 +1,29 @@
-package com.example.carpoolbuddy;
-
-import androidx.annotation.NonNull;
+package com.example.carpoolbuddy.Activity;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
-import android.location.Location;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
+import com.example.carpoolbuddy.Activity.Explore.VehicleProfileActivity;
+import com.example.carpoolbuddy.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import android.app.Activity;
-
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.common.api.ApiException;
-import com.google.firebase.auth.AuthCredential;
-import com.google.firebase.auth.GoogleAuthProvider;
 
-import java.util.ArrayList;
-
+/**
+ * This is an Activity class that lets users sign in, sign up, or sign in with Google. This Activity is
+ * the first to appear in this application.
+ *
+ * @author sherrys2025
+ * @version 1.0
+ */
 public class AuthActivity extends AppCompatActivity {
 
     public static GoogleSignInClient mGoogleSignInClient;
@@ -42,14 +35,19 @@ public class AuthActivity extends AppCompatActivity {
     private FirebaseFirestore firestore;
 
 
+    /**
+     * create Authorization page
+     * @param savedInstanceState If the activity is being re-initialized after
+     *     previously being shut down then this Bundle contains the data it most
+     *     recently supplied in {@link #onSaveInstanceState}.  <b><i>Note: Otherwise it is null.</i></b>
+     *
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        System.out.println("print");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_auth);
 
-        // [START config_signin]
         // Configure Google Sign In
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
@@ -57,10 +55,7 @@ public class AuthActivity extends AppCompatActivity {
                 .build();
 
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
-        // [END config_signin]
-
         mAuth = FirebaseAuth.getInstance();
-//        firestore = FirebaseFirestore.getInstance();
 
         emailField = findViewById(R.id.editTextEmail);
         passwordField = findViewById(R.id.editTextPassword);
@@ -72,6 +67,10 @@ public class AuthActivity extends AppCompatActivity {
         }
 
     }
+
+    /**
+     * If user is signed in, open signed in page.
+     */
     @Override
     public void onStart(){
         super.onStart();
@@ -82,18 +81,22 @@ public class AuthActivity extends AppCompatActivity {
         }
     }
 
-    // [START googlesignin]
+    /**
+     * Start Loading Activity with intentions to sign in with Google
+     * @param v View that called this method
+     */
     public void googleSignIn(View v) {
         Intent intent = new Intent(this, LoadingActivity.class);
         intent.putExtra("type", "googleSignIn");
         startActivity(intent);
     }
-    // [END googlesignin]
 
-//    void uploadData(FirebaseUser mUser){
-//
-//    }
-
+    /**
+     * If email or password is not entered properly, display error message
+     * @param email
+     * @param password
+     * @return whether an error message has been displayed
+     */
     private boolean checkEmailAndPassword(String email, String password){
         if(email.equals(null) || email.equals("")) {
             errorMsg.setText("Please fill in the email.");
@@ -108,11 +111,13 @@ public class AuthActivity extends AppCompatActivity {
             return true;
         }
 
-        System.out.println(email);
-        System.out.println(password);
         return false;
     }
 
+    /**
+     * Display error message and format the words accordingly
+     * @param exceptionMessage error message to be displayed
+     */
     private void displayErrorMessage(String exceptionMessage){
         if (exceptionMessage.equals("The supplied auth credential is incorrect, malformed or has expired.")){
             errorMsg.setText("Incorrect password. Try again.");
@@ -120,7 +125,7 @@ public class AuthActivity extends AppCompatActivity {
             if (exceptionMessage.length() < 40) {
                 errorMsg.setText(exceptionMessage);
             } else {
-                for (int i = 40; i > 0; i-=40) {
+                for (int i = 40; i > 0; i-=40) { // if error message is too long, turn into different lines
                     while (exceptionMessage.charAt(i) != ' '){
                         i--;
                     }
@@ -132,31 +137,37 @@ public class AuthActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Start Loading Activity with intentions to sign in
+     * @param v View that called this method
+     */
     public void signIn(View v){
-        System.out.println("Sign in");
         String email = emailField.getText().toString();
         String password = passwordField.getText().toString();
 
         if(checkEmailAndPassword(email, password)){
             return;
         }
-
+        // start new intent
         Intent intent = new Intent(this, LoadingActivity.class);
         intent.putExtra("email", email);
         intent.putExtra("password", password);
         intent.putExtra("type", "SignIn");
         startActivity(intent);
     }
-    public void signUp(View v){
-        System.out.println("Sign up");
 
+    /**
+     * Start Loading Activity with intentions to sign up
+     * @param v View that called this method
+     */
+    public void signUp(View v){
         String email = emailField.getText().toString();
         String password = passwordField.getText().toString();
 
-        if(checkEmailAndPassword(email, password)){
+        if(checkEmailAndPassword(email, password)){ //check email and password are proper
             return;
         }
-
+        // start new intent
         Intent intent = new Intent(this, LoadingActivity.class);
         intent.putExtra("email", email);
         intent.putExtra("password", password);
@@ -164,6 +175,10 @@ public class AuthActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    /**
+     * Start intent to go to VehicleProfile page
+     * @param user FirebaseUser
+     */
     protected void updateUI(FirebaseUser user){
         Intent intent = new Intent(this, VehicleProfileActivity.class);
         startActivity(intent);

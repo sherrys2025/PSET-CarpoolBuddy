@@ -1,0 +1,452 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/darkgreen"
+    tools:context=".Activity.Explore.BookNewRideActivity">
+
+    <ProgressBar
+        android:id="@+id/progressBarBookRide"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="124dp"
+        android:layout_height="50dp"
+        android:indeterminate="true"
+        android:indeterminateTint="@color/lightgreen"
+        android:max="@integer/material_motion_duration_medium_1"
+        android:progress="@android:integer/config_mediumAnimTime"
+        android:progressTint="@color/lightgreen"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.5" />
+
+    <ScrollView
+        android:id="@+id/everythingBookRide"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/darkgreen">
+
+            <ImageButton
+                android:id="@+id/backButtonBookRide"
+                android:layout_width="92dp"
+                android:layout_height="76dp"
+                android:backgroundTint="#00FFFFFF"
+                android:onClick="backToExplore"
+                android:scaleType="fitXY"
+                android:tintMode="multiply"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@android:drawable/ic_menu_revert"
+                app:tint="@color/lightgreen" />
+
+            <TextView
+                android:id="@+id/titleBookRideLabel"
+                android:layout_width="234dp"
+                android:layout_height="34dp"
+                android:layout_marginTop="40dp"
+                android:ems="10"
+                android:fontFamily="sans-serif-smallcaps"
+                android:text="My Vehicle"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/bookRideImage"
+                android:layout_width="415dp"
+                android:layout_height="230dp"
+                android:layout_marginTop="16dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/titleBookRideLabel"
+                app:srcCompat="@drawable/cardefaultpic" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:orientation="vertical"
+                app:layout_constraintTop_toBottomOf="@+id/nextImageVehicleBookRide"
+                tools:layout_editor_absoluteX="16dp">
+
+                <TextView
+                    android:id="@+id/errorMsgBookRide"
+                    android:layout_width="300dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:gravity="center"
+                    android:maxLines="4"
+                    android:textColor="#FF0000" />
+
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="5dp" />
+
+                <LinearLayout
+                    android:id="@+id/detailsOfBookRide"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/dateVehicleBookRide"
+                        android:layout_width="325dp"
+                        android:layout_height="wrap_content"
+                        android:autoLink="none"
+                        android:ems="10"
+                        android:enabled="false"
+                        android:hint="Date"
+                        android:inputType="none"
+                        android:textAlignment="center"
+                        android:textColor="@color/white"
+                        android:textColorHint="@color/white"
+                        android:textSize="24sp"
+                        android:textStyle="bold">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/dateVehicleEditBookRide"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="8dp"
+                            android:drawableTint="@color/white"
+                            android:inputType="none"
+                            android:textColor="@color/lightgray"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toStartOf="@+id/nameSettingEdit"
+                            tools:text="01/01/2024" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <Space
+                        android:layout_width="match_parent"
+                        android:layout_height="5dp" />
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/priceVehicleBookRide"
+                        android:layout_width="325dp"
+                        android:layout_height="wrap_content"
+                        android:autoLink="none"
+                        android:ems="10"
+                        android:enabled="false"
+                        android:hint="Price"
+                        android:textAlignment="center"
+                        android:textColor="@color/white"
+                        android:textColorHint="@color/white"
+                        android:textSize="24sp"
+                        android:textStyle="bold">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/priceVehicleEditBookRide"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="8dp"
+                            android:drawableLeft="@drawable/baseline_attach_money_24"
+                            android:drawableTint="@color/white"
+                            android:textColor="@color/lightgray"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toStartOf="@+id/nameSettingEdit"
+                            tools:text="5.00" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <Space
+                        android:layout_width="match_parent"
+                        android:layout_height="5dp" />
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/departureVehicleBookRide"
+                        android:layout_width="325dp"
+                        android:layout_height="wrap_content"
+                        android:autoLink="none"
+                        android:ems="10"
+                        android:hint="Your Address"
+                        android:inputType="textPostalAddress"
+                        android:textAlignment="center"
+                        android:textColor="@color/white"
+                        android:textColorHint="@color/white"
+                        android:textSize="24sp"
+                        android:textStyle="bold">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/departureVehicleEditBookRide"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="8dp"
+                            android:drawableTint="@color/white"
+                            android:inputType="textPostalAddress"
+                            android:textColor="@color/white"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toStartOf="@+id/nameSettingEdit"
+                            tools:text="1 King's Road" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <Space
+                        android:layout_width="match_parent"
+                        android:layout_height="5dp" />
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/specialVehicleBookRide"
+                        android:layout_width="325dp"
+                        android:layout_height="wrap_content"
+                        android:autoLink="none"
+                        android:ems="10"
+                        android:enabled="false"
+                        android:hint="Model"
+                        android:inputType="none"
+                        android:textAlignment="center"
+                        android:textColor="@color/white"
+                        android:textColorHint="@color/white"
+                        android:textSize="24sp"
+                        android:textStyle="bold">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/specialVehicleEditBookRide"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="8dp"
+                            android:drawableTint="@color/white"
+                            android:inputType="none"
+                            android:text="BMW 888"
+                            android:textColor="@color/lightgray"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toStartOf="@+id/nameSettingEdit" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <Space
+                        android:layout_width="match_parent"
+                        android:layout_height="5dp" />
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/plateVehicleBookRide"
+                        android:layout_width="325dp"
+                        android:layout_height="wrap_content"
+                        android:autoLink="none"
+                        android:ems="10"
+                        android:enabled="false"
+                        android:hint="Number Plate"
+                        android:inputType="none"
+                        android:textAlignment="center"
+                        android:textColor="@color/white"
+                        android:textColorHint="@color/white"
+                        android:textSize="24sp"
+                        android:textStyle="bold">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/plateVehicleEditBookRide"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="8dp"
+                            android:drawableTint="@color/white"
+                            android:inputType="none"
+                            android:text="HK1357"
+                            android:textColor="@color/lightgray"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toStartOf="@+id/nameSettingEditRide" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <Space
+                        android:layout_width="match_parent"
+                        android:layout_height="5dp" />
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/capacityVehicleBookRide"
+                        android:layout_width="325dp"
+                        android:layout_height="wrap_content"
+                        android:autoLink="none"
+                        android:ems="10"
+                        android:enabled="false"
+                        android:hint="Capacity"
+                        android:textAlignment="center"
+                        android:textColor="@color/white"
+                        android:textColorHint="@color/white"
+                        android:textSize="24sp"
+                        android:textStyle="bold">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/capacityVehicleEditBookRide"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="8dp"
+                            android:drawableTint="@color/white"
+                            android:enabled="false"
+                            android:text="2"
+                            android:textColor="@color/lightgray"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toStartOf="@+id/nameSettingEditRide" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <Space
+                        android:layout_width="match_parent"
+                        android:layout_height="5dp" />
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/ownerVehicleBookRide"
+                        android:layout_width="325dp"
+                        android:layout_height="wrap_content"
+                        android:autoLink="none"
+                        android:ems="10"
+                        android:enabled="false"
+                        android:hint="Owner"
+                        android:inputType="none"
+                        android:textAlignment="center"
+                        android:textColor="@color/lightgreen"
+                        android:textColorHint="@color/white"
+                        android:textSize="24sp"
+                        android:textStyle="bold">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/ownerVehicleEditBookRide"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="8dp"
+                            android:drawableTint="@color/white"
+                            android:enabled="false"
+                            android:inputType="none"
+                            android:text="XXXXX"
+                            android:textColor="@color/lightgray"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toStartOf="@+id/nameSettingEditRide" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <Space
+                        android:layout_width="match_parent"
+                        android:layout_height="5dp" />
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/phoneNumberVehicleBookRide"
+                        android:layout_width="325dp"
+                        android:layout_height="wrap_content"
+                        android:autoLink="none"
+                        android:ems="10"
+                        android:enabled="false"
+                        android:hint="Contact Information"
+                        android:inputType="none"
+                        android:textAlignment="center"
+                        android:textColor="@color/lightgreen"
+                        android:textColorHint="@color/white"
+                        android:textSize="24sp"
+                        android:textStyle="bold">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/phoneNumberVehicleEditBookRide"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="8dp"
+                            android:drawableTint="@color/white"
+                            android:enabled="false"
+                            android:inputType="none"
+                            android:text="12345678"
+                            android:textColor="@color/lightgray"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toStartOf="@+id/nameSettingEditRide" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <Space
+                        android:layout_width="match_parent"
+                        android:layout_height="5dp" />
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/uniqueIdVehicleBookRide"
+                        android:layout_width="325dp"
+                        android:layout_height="wrap_content"
+                        android:autoLink="none"
+                        android:ems="10"
+                        android:enabled="false"
+                        android:hint="Vehicle ID"
+                        android:inputType="none"
+                        android:textAlignment="center"
+                        android:textColor="@color/white"
+                        android:textColorHint="@color/white"
+                        android:textSize="24sp"
+                        android:textStyle="bold">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/uniqueIdVehicleEditBookRide"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="8dp"
+                            android:drawableTint="@color/white"
+                            android:enabled="false"
+                            android:inputType="none"
+                            android:text="XXXXXXXXXX"
+                            android:textColor="@color/lightgray"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toStartOf="@+id/nameSettingEditRide" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <Space
+                        android:layout_width="match_parent"
+                        android:layout_height="20dp" />
+
+                    <Button
+                        android:id="@+id/updateVehicleBookRide"
+                        android:layout_width="325dp"
+                        android:layout_height="54dp"
+                        android:backgroundTint="#75A63B"
+                        android:fontFamily="sans-serif-medium"
+                        android:insetTop="2dp"
+                        android:insetBottom="2dp"
+                        android:onClick="updateRide"
+                        android:text="Join Ride" />
+                </LinearLayout>
+
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp" />
+
+            </LinearLayout>
+
+            <ImageButton
+                android:id="@+id/nextImageVehicleBookRide"
+                style="@android:style/Widget.Holo.Light.ImageButton"
+                android:layout_width="40dp"
+                android:layout_height="60dp"
+                android:layout_marginEnd="16dp"
+                android:alpha="100"
+                android:onClick="nextImage"
+                android:rotation="270"
+                android:scaleType="centerInside"
+                android:src="@android:drawable/arrow_down_float"
+                app:layout_constraintEnd_toEndOf="@+id/bookRideImage"
+                app:layout_constraintTop_toBottomOf="@+id/bookRideImage"
+                app:srcCompat="@drawable/baseline_arrow_right_24"
+                app:tint="@color/lightgreen" />
+
+            <ImageButton
+                android:id="@+id/prevImageVehicleBookRide"
+                style="@android:style/Widget.Holo.Light.ImageButton"
+                android:layout_width="40dp"
+                android:layout_height="60dp"
+                android:layout_marginStart="16dp"
+                android:alpha="100"
+                android:onClick="prevImage"
+                android:rotation="90"
+                android:scaleType="centerInside"
+                android:src="@android:drawable/arrow_down_float"
+                app:layout_constraintStart_toStartOf="@+id/bookRideImage"
+                app:layout_constraintTop_toBottomOf="@+id/bookRideImage"
+                app:srcCompat="@drawable/baseline_arrow_right_24"
+                app:tint="@color/lightgreen" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

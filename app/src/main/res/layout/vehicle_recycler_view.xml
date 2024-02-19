@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        app:cardBackgroundColor="@color/white"
+        app:cardCornerRadius="5dp"
+        app:cardElevation="2dp"
+        app:cardUseCompatPadding="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.5">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/myVehicleImageRow"
+                android:layout_width="180dp"
+                android:layout_height="110dp"
+                android:layout_marginStart="5dp"
+                android:scaleType="fitCenter"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.5"
+                app:srcCompat="@drawable/cardefaultpic" />
+
+            <TextView
+                android:id="@+id/titleMyVehicleRow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-black"
+                android:text="Title of Vehicle"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                app:layout_constraintStart_toStartOf="@+id/typeOfMyVehicleRow"
+                app:layout_constraintTop_toTopOf="@+id/myVehicleImageRow" />
+
+            <TextView
+                android:id="@+id/typeOfMyVehicleRow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:fontFamily="sans-serif-light"
+                android:text="Car, XX1234"
+                android:textStyle="italic"
+                app:layout_constraintStart_toStartOf="@+id/editMyVehicleRow"
+                app:layout_constraintTop_toBottomOf="@+id/titleMyVehicleRow" />
+
+            <ImageButton
+                android:id="@+id/deleteMyVehicleRow"
+                style="@android:style/Widget.Holo.Light.ImageButton"
+                android:layout_width="wrap_content"
+                android:layout_height="45dp"
+                android:backgroundTint="#F4363C"
+                app:layout_constraintBottom_toBottomOf="@+id/editMyVehicleRow"
+                app:layout_constraintStart_toEndOf="@+id/addRideMyVehicleRow"
+                app:srcCompat="@drawable/baseline_delete_forever_24" />
+
+            <ImageButton
+                android:id="@+id/editMyVehicleRow"
+                style="@android:style/Widget.Holo.Light.ImageButton"
+                android:layout_width="83dp"
+                android:layout_height="45dp"
+                android:layout_marginStart="5dp"
+                android:backgroundTint="#65B2C5"
+                app:layout_constraintBottom_toBottomOf="@+id/myVehicleImageRow"
+                app:layout_constraintStart_toEndOf="@+id/myVehicleImageRow"
+                app:srcCompat="@drawable/baseline_edit_24" />
+
+            <ImageButton
+                android:id="@+id/addRideMyVehicleRow"
+                style="@android:style/Widget.Holo.Light.ImageButton"
+                android:layout_width="83dp"
+                android:layout_height="45dp"
+                android:backgroundTint="@color/lightgreen"
+                android:src="@drawable/baseline_add_circle_24"
+                app:layout_constraintBottom_toBottomOf="@+id/editMyVehicleRow"
+                app:layout_constraintStart_toEndOf="@+id/editMyVehicleRow" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+</androidx.constraintlayout.widget.ConstraintLayout>

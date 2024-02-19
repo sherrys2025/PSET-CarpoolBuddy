@@ -5,10 +5,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/darkgreen"
-    tools:context=".Activity.Explore.VehicleProfileActivity">
+    tools:context=".Activity.AddNewRide.ViewRideActivity">
 
     <ProgressBar
-        android:id="@+id/progressBarMyExplore"
+        android:id="@+id/progressBarMyRides"
         style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="124dp"
         android:layout_height="50dp"
@@ -24,61 +24,21 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.5" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/myExploreRecycler"
-        android:layout_width="match_parent"
-        android:layout_height="542dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginBottom="20dp"
-        app:layout_constraintBottom_toTopOf="@+id/imageView8"
-        app:layout_constraintTop_toBottomOf="@+id/exploreLabel"
-        tools:layout_editor_absoluteX="1dp">
-
-    </androidx.recyclerview.widget.RecyclerView>
-
-    <EditText
-        android:id="@+id/exploreLabel"
-        android:layout_width="194dp"
-        android:layout_height="63dp"
-        android:layout_marginTop="24dp"
-        android:ems="10"
-        android:enabled="false"
-        android:fontFamily="sans-serif-smallcaps"
-        android:inputType="text"
-        android:text="Explore"
-        android:textAlignment="center"
-        android:textColor="@color/white"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <ImageView
-        android:id="@+id/SettingsViewVehicle"
+        android:id="@+id/addRide"
         android:layout_width="35dp"
         android:layout_height="35dp"
+        android:layout_marginStart="32dp"
         android:layout_marginTop="32dp"
-        android:layout_marginEnd="32dp"
-        android:onClick="toSettings"
-        android:src="@drawable/settings"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:tint="@color/lightgreen" />
-
-    <ImageView
-        android:id="@+id/Logo"
-        android:layout_width="87dp"
-        android:layout_height="89dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="4dp"
+        android:clickable="true"
         android:cropToPadding="false"
+        android:onClick="toRide"
         android:rotation="90"
-        android:scaleType="centerCrop"
+        android:scaleType="fitStart"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/logo" />
+        app:srcCompat="@drawable/baseline_add_circle_24"
+        app:tint="@color/lightgreen" />
 
     <ImageView
         android:id="@+id/imageView8"
@@ -100,7 +60,7 @@
         android:layout_height="38dp"
         android:layout_marginBottom="10dp"
         android:background="#00FFFFFF"
-        android:onClick="toVehicles"
+        android:onClick="toVehicle"
         android:scaleType="fitXY"
         android:src="@drawable/baseline_directions_car_24"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -116,11 +76,12 @@
         android:layout_marginEnd="68dp"
         android:layout_marginBottom="10dp"
         android:background="#00FFFFFF"
+        android:onClick="toExplore"
         android:scaleType="fitXY"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/ViewVehiclesButton"
         app:srcCompat="@drawable/dashboard"
-        app:tint="@color/midgreen" />
+        app:tint="@color/white" />
 
     <ImageButton
         android:id="@+id/BookingButton"
@@ -132,12 +93,55 @@
         android:backgroundTintMode="multiply"
         android:foregroundTint="@color/white"
         android:foregroundTintMode="multiply"
-        android:onClick="toRide"
         android:scaleType="fitXY"
         android:tintMode="multiply"
         app:layout_constraintStart_toEndOf="@+id/ViewVehiclesButton"
         app:layout_constraintTop_toTopOf="@+id/ViewVehiclesButton"
         app:srcCompat="@drawable/baseline_edit_calendar_24"
-        app:tint="@color/white" />
+        app:tint="@color/midgreen" />
+
+    <EditText
+        android:id="@+id/myRidesLabel"
+        android:layout_width="230dp"
+        android:layout_height="63dp"
+        android:layout_marginTop="24dp"
+        android:ems="10"
+        android:enabled="false"
+        android:fontFamily="sans-serif-smallcaps"
+        android:inputType="text"
+        android:text="My Rides"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/SettingsViewRide"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="32dp"
+        android:onClick="toSettings"
+        android:src="@drawable/settings"
+        app:layout_constraintBottom_toBottomOf="@+id/addRide"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="@color/lightgreen" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/myRidesRecycler"
+        android:layout_width="match_parent"
+        android:layout_height="542dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
+        app:layout_constraintBottom_toTopOf="@+id/imageView8"
+        app:layout_constraintTop_toBottomOf="@+id/myRidesLabel"
+        tools:layout_editor_absoluteX="1dp">
+
+    </androidx.recyclerview.widget.RecyclerView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

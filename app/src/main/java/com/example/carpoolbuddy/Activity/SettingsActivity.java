@@ -1,4 +1,4 @@
-package com.example.carpoolbuddy;
+package com.example.carpoolbuddy.Activity;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
@@ -12,13 +12,13 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.carpoolbuddy.Activity.Explore.VehicleProfileActivity;
+import com.example.carpoolbuddy.R;
 import com.example.carpoolbuddy.Users.Alum;
 import com.example.carpoolbuddy.Users.Staff;
 import com.example.carpoolbuddy.Users.Student;
@@ -37,6 +37,12 @@ import com.google.firebase.storage.StorageReference;
 import java.io.File;
 import java.io.IOException;
 
+/**
+ * This is an Activity class that lets users set up or edit their profile information.
+ *
+ * @author sherrys2025
+ * @version 1.0
+ */
 public class SettingsActivity extends AppCompatActivity {
     private ShapeableImageView profilePic;
     private User user;
@@ -66,8 +72,24 @@ public class SettingsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
 
-        progressBar = findViewById(R.id.progressBarSettings);
+        // set up views
+        findViewsById();
+        setInvisible();
 
+        firestore = FirebaseFirestore.getInstance();
+        firebaseStorage = FirebaseStorage.getInstance();
+        storageReference = firebaseStorage.getReference();
+
+        userId = getIntent().getStringExtra("uid");
+        findUser();
+
+    }
+
+    /**
+     * Set up the views by their Ids.
+     */
+    private void findViewsById(){
+        progressBar = findViewById(R.id.progressBarSettings);
         nameLabel = findViewById(R.id.nameSettingEdit);
         name = findViewById(R.id.nameSettingEditable);
         uniqueField = findViewById(R.id.uniqueFieldSettingsEditable);
@@ -91,59 +113,51 @@ public class SettingsActivity extends AppCompatActivity {
                 name, nameLabel, uniqueField, uniqueFieldLabel, errorMsg, returnButton, updateAll, email,
                 logOutButton, userTypeLabel, profilePic, uniqueId, uniqueIdLabel, editImage, userType, numOfVehicles, numOfVehiclesLabel,
                 phoneNumber, phoneNumberLabel};
-
-        setInvisible();
-
-        firestore = FirebaseFirestore.getInstance();
-        firebaseStorage = FirebaseStorage.getInstance();
-        storageReference = firebaseStorage.getReference();
-
-        userId = getIntent().getStringExtra("uid");
-        findUser();
-
     }
 
+    /**
+     * Retrieve user and its child object from Firebase.
+     */
     private void findUser(){
         DocumentReference docRef = firestore.collection("users").document(userId);
         docRef.get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 DocumentSnapshot document = task.getResult();
-                if (document.exists()) {
                     user = document.toObject(User.class);
-                        switch (user.getUserType()) {
-                        case "Student":
-                            studentUser = document.toObject(Student.class);
-                            break;
-                        case "Alum":
-                            alumUser = document.toObject(Alum.class);
-                            break;
-                        default:
-                            staffUser = document.toObject(Staff.class);
-                          }
-
-                        name.setText(user.getName());
-                        setFields();
-                } else {
-                    Log.d("TAG", "User document does not exist");
-                }
+                    //create the child class based on user's user type
+                    switch (user.getUserType()) {
+                    case "Student":
+                        studentUser = document.toObject(Student.class);
+                        break;
+                    case "Alum":
+                        alumUser = document.toObject(Alum.class);
+                        break;
+                    default:
+                        staffUser = document.toObject(Staff.class);
+                      }
+                    setFields();
             } else {
                 Log.d("TAG", "Error retrieving user document: " + task.getException());
             }
         });
     }
 
+    /**
+     * Set up the views with the correct user information.
+     */
     private void setFields(){
+        name.setText(user.getName());
         logOutButton.setVisibility(View.VISIBLE);
-        if (!user.isSetUp()) {
+        if (user.getPhoneNumber().equals("88888888")) { // if user is not yet set up
             returnButton.setVisibility(View.INVISIBLE);
             updateAll.setText("Create Profile");
         } else {
             returnButton.setVisibility(View.VISIBLE);
             updateAll.setText("Update Profile");
         }
-
-        setImage();
-        switch (user.getUserType()) {
+        phoneNumber.setText(user.getPhoneNumber());
+        setImage(); //set up profile picture
+        switch (user.getUserType()) { //set up special field based on the type of student
             case "Student":
                 setFieldsHelper(studentUser);
                 break;
@@ -153,30 +167,44 @@ public class SettingsActivity extends AppCompatActivity {
             default:
                 setFieldsHelper(staffUser);
         }
-
         email.setText(user.getEmail());
         uniqueId.setText(user.getUid().substring(0,23) + "...");
         numOfVehicles.setText(Integer.toString(user.getOwnedVehicles().size()));
-        setVisible();
+        setVisible(); // stop progress bar and display fields
     }
 
+    /**
+     * Set up the special field for a student user.
+     * @param user Student object
+     */
     private void setFieldsHelper(Student user){
         userType.setText("Student");
         uniqueFieldLabel.setHint("Graduating Year");
         uniqueField.setText(Integer.toString(studentUser.getGraduatingYear()));
     }
 
+    /**
+     * Set up the special field for an alum user.
+     * @param user Alum object
+     */
     private void setFieldsHelper(Alum user){
         userType.setText("Alum");
         uniqueFieldLabel.setHint("Graduate Year");
         uniqueField.setText(Integer.toString(alumUser.getGraduateYear()));
     }
 
+    /**
+     * Set up the special field for a staff user.
+     * @param user Staff object
+     */
     private void setFieldsHelper(Staff user){
         uniqueFieldLabel.setHint("In School Title");
         uniqueField.setText(staffUser.getInSchoolTitle());
     }
 
+    /**
+     * Retrieve image from FirebaseStorage and set up the profile picture.
+     */
     private void setImage(){
         StorageReference imageToSet = firebaseStorage.getReference("image/" + user.getUid());
         File localFile = null;
@@ -192,10 +220,25 @@ public class SettingsActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Called when user clicks on the Profile picture to upload a new image
+     * @param v View that called this method
+     */
     public void uploadPic(View v){
         choosePicture();
     }
 
+    /**
+     * Retrieve image that the user has selected
+     * @param requestCode The integer request code originally supplied to
+     *                    startActivityForResult(), allowing you to identify who this
+     *                    result came from.
+     * @param resultCode The integer result code returned by the child activity
+     *                   through its setResult().
+     * @param data An Intent, which can return result data to the caller
+     *               (various data can be attached to Intent "extras").
+     *
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -206,6 +249,9 @@ public class SettingsActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Upload image to FireBase Storage
+     */
     private void uploadPicture() {
         final ProgressDialog pd = new ProgressDialog(this);
         pd.setTitle("Uploading Image...");
@@ -228,6 +274,9 @@ public class SettingsActivity extends AppCompatActivity {
                 });
     }
 
+    /**
+     * Start intent to select image from phone album.
+     */
     private void choosePicture() {
         Intent intent = new Intent();
         intent.setType("image/*");
@@ -236,12 +285,17 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
 
+    /**
+     * After user presses Create Profile or Update Profile, save all entered information back to Firebase
+     * @param v View that called this method
+     */
     public void updateAllSettings(View v){
         user.setSetUp(true);
         String newName = name.getText().toString();
         String unique = uniqueField.getText().toString();
         String pN = phoneNumber.getText().toString();
 
+        // update user based on the child user
         switch (user.getUserType()) {
             case "Student":
                 if (!updateAllSettingsStudent(newName, unique, pN)) {
@@ -258,14 +312,27 @@ public class SettingsActivity extends AppCompatActivity {
                 updateFirebase(staffUser);
         }
 
+        //display saved
         Toast.makeText(SettingsActivity.this, "Saved", Toast.LENGTH_SHORT).show();
         returnToProfile();
     }
 
+    /**
+     * Verifies phone number is valid
+     * @param pN the entered phone number
+     * @return whether the phone number is valid
+     */
     private boolean checkPhone(String pN){
         return pN.length()!=8;
     }
 
+    /**
+     * Update all fields for Student User
+     * @param newName name of user
+     * @param unique unique field of user (graduating year)
+     * @param pN phone number of user
+     * @return whether update has been successful or not
+     */
     private boolean updateAllSettingsStudent(String newName, String unique, String pN){
         try{
             int valueOfUnique = Integer.parseInt(unique);
@@ -280,6 +347,13 @@ public class SettingsActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Update all fields for Alum User
+     * @param newName name of user
+     * @param unique unique field of user (graduate year)
+     * @param pN phone number of user
+     * @return whether update has been successful or not
+     */
     private boolean updateAllSettingsAlum(String newName, String unique, String pN){
         try{
             int valueOfUnique = Integer.parseInt(unique);
@@ -294,6 +368,10 @@ public class SettingsActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Update student user to Firebase
+     * @param user Student object
+     */
     private void updateFirebase(Student user){
         firestore.collection("users").document(user.getUid()).set(user)
                 .addOnCompleteListener(this, task -> {
@@ -305,6 +383,10 @@ public class SettingsActivity extends AppCompatActivity {
                 });
     }
 
+    /**
+     * Update Alum user to Firebase
+     * @param user Alum object
+     */
     private void updateFirebase(Alum user){
         firestore.collection("users").document(user.getUid()).set(user)
                 .addOnCompleteListener(this, task -> {
@@ -316,6 +398,10 @@ public class SettingsActivity extends AppCompatActivity {
                 });
     }
 
+    /**
+     * Update staff user to Firebase
+     * @param user Staff object
+     */
     private void updateFirebase(Staff user){
         firestore.collection("users").document(user.getUid()).set(user)
                 .addOnCompleteListener(this, task -> {
@@ -327,45 +413,66 @@ public class SettingsActivity extends AppCompatActivity {
                 });
     }
 
+    /**
+     * When user presses logout, asks for confirmation then log out;
+     * Change intent to AuthActivity
+     * @param v View that called this method
+     */
     public void logOut(View v) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this); //build alert
         builder.setTitle("Log out");
         builder.setMessage("Are you sure you want to log out?");
 
-        builder.setPositiveButton("Yes", (dialog, which) -> {
+        builder.setPositiveButton("Yes", (dialog, which) -> { //if yes,
             FirebaseAuth.getInstance().signOut();
             if (AuthActivity.mGoogleSignInClient!=null) {
                 AuthActivity.mGoogleSignInClient.signOut();
             }
-
-            logOutInstance();
+            logOutInstance();   // change intents
         });
 
-        builder.setNegativeButton("No", (dialog, which) -> {
+        builder.setNegativeButton("No", (dialog, which) -> { // if no,
         });
         AlertDialog alertDialog = builder.create();
-        alertDialog.show();
+        alertDialog.show();                                       // display alert
     }
 
+    /**
+     * Display error message.
+     * @param message error message
+     */
     public void errorMessage(String message){
         errorMsg.setText(message);
     }
 
+    /**
+     * Start new intent to AuthActivity.
+     */
     private void logOutInstance(){
         Intent intent = new Intent(this, AuthActivity.class);
         startActivity(intent);
     }
 
+    /**
+     * If user presses the back button, return to VehicleProfile page.
+     * @param v View that called this method.
+     */
     public void backToMain(View v) {
         returnToProfile();
     }
 
+    /**
+     * Return to VehicleProfile page by starting new intent
+     */
     private void returnToProfile(){
         Intent intent = new Intent(this, VehicleProfileActivity.class);
         intent.putExtra("uid", user.getUid());
         startActivity(intent);
     }
 
+    /**
+     * Set fields to be invisible while progress bar is loading.
+     */
     private void setInvisible(){
         for (View v: listOfViews) {
             v.setVisibility(View.INVISIBLE);
@@ -373,6 +480,9 @@ public class SettingsActivity extends AppCompatActivity {
         progressBar.animate();
     }
 
+    /**
+     * Set fields to be visible and hide progress bar.
+     */
     private void setVisible(){
         for (View v: listOfViews) {
             v.setVisibility(View.VISIBLE);

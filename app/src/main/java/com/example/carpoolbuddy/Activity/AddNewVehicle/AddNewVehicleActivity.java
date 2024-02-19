@@ -1,13 +1,13 @@
-package com.example.carpoolbuddy;
+package com.example.carpoolbuddy.Activity.AddNewVehicle;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -23,6 +23,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.carpoolbuddy.R;
 import com.example.carpoolbuddy.Users.Alum;
 import com.example.carpoolbuddy.Users.Staff;
 import com.example.carpoolbuddy.Users.Student;
@@ -42,9 +43,16 @@ import com.google.firebase.storage.StorageReference;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.UUID;
 
+/**
+ * AddNewVehicleActivity is an Activity class that shows up when users have either chosen to edit or add a
+ * new vehicle. It is only displayed to the owner of vehicle. Owner can change capacity, title, model, and
+ * other details. Owner can upload as many images of their vehicle as desired.
+ *
+ * @author sherrys2025
+ * @version 1.0
+ */
 public class AddNewVehicleActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
 
     private User user;
@@ -62,19 +70,23 @@ public class AddNewVehicleActivity extends AppCompatActivity implements AdapterV
 
     private ScrollView everythingView;
     private TextView errorMsg;
-    private TextInputLayout titleLabel, specialLabel, capacityLabel;
-    private TextInputEditText title, special, capacity, owner, uniqueVehicleId;
+    private TextInputLayout specialLabel;
+    private TextInputEditText title, special, capacity, owner, uniqueVehicleId, numberPlate;
     private Spinner typeOfVehicle;
     private Button createVehicle;
     private ImageView imageOfVehicle, deleteImage;
     private ImageButton prev, next;
     private ProgressBar progressBar;
     private Uri imageUri;
-    private ArrayList<Uri> imagesUri;
     private int imageIndex;
 
-
-
+    /**
+     * create activity, set up fields while progress bar is laoding
+     * @param savedInstanceState If the activity is being re-initialized after
+     *     previously being shut down then this Bundle contains the data it most
+     *     recently supplied in {@link #onSaveInstanceState}.  <b><i>Note: Otherwise it is null.</i></b>
+     *
+     */
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,15 +96,24 @@ public class AddNewVehicleActivity extends AppCompatActivity implements AdapterV
         firestore = FirebaseFirestore.getInstance();
         firebaseStorage = FirebaseStorage.getInstance();
         storageReference = firebaseStorage.getReference();
+        findViews();
+        setInvisible();
 
+        userId = getIntent().getStringExtra("uid");
+        vehicleId = getIntent().getStringExtra("vid");
+        findUser();
+    }
+
+    /**
+     * find the Views by their IDs
+     */
+    private void findViews(){
         everythingView = findViewById(R.id.everythingVehicle);
         errorMsg = findViewById(R.id.errorMsgVehicle);
-        titleLabel = findViewById(R.id.titleVehicle);
         title = findViewById(R.id.titleVehicleEdit);
         specialLabel = findViewById(R.id.specialVehicle);
         special = findViewById(R.id.specialVehicleEdit);
         typeOfVehicle = findViewById(R.id.typeOfVehicleEdit);
-        capacityLabel = findViewById(R.id.capacityVehicle);
         capacity = findViewById(R.id.capacityVehicleEdit);
         owner = findViewById(R.id.ownerVehicleEdit);
         uniqueVehicleId = findViewById(R.id.uniqueIdVehicleEdit);
@@ -102,91 +123,90 @@ public class AddNewVehicleActivity extends AppCompatActivity implements AdapterV
         prev = findViewById(R.id.prevImageVehicle);
         next = findViewById(R.id.nextImageVehicle);
         progressBar = findViewById(R.id.progressBarVehicle);
-
-        imagesUri = new ArrayList<>();
-        setInvisible();
-
-        userId = getIntent().getStringExtra("uid");
-        vehicleId = getIntent().getStringExtra("vid");
-        findUser();
-
+        numberPlate = findViewById(R.id.plateVehicleEdit);
     }
 
+    /**
+     * find user and its corresponding child object from firebase
+     */
     private void findUser(){
         DocumentReference docRef = firestore.collection("users").document(userId);
         docRef.get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 DocumentSnapshot document = task.getResult();
-                if (document.exists()) {
-                    user = document.toObject(User.class);
-                    switch (user.getUserType()) {
-                        case "Student":
-                            studentUser = document.toObject(Student.class);
-                            break;
-                        case "Alum":
-                            alumUser = document.toObject(Alum.class);
-                            break;
-                        default:
-                            staffUser = document.toObject(Staff.class);
-                    }
-                    findVehicle();
-                    setFields();
-                    setVisible();
-
-                } else {
-                    Log.d("TAG", "User document does not exist");
+                user = document.toObject(User.class);
+                switch (user.getUserType()) {
+                    case "Student":
+                        studentUser = document.toObject(Student.class);
+                        break;
+                    case "Alum":
+                        alumUser = document.toObject(Alum.class);
+                        break;
+                    default:
+                        staffUser = document.toObject(Staff.class);
                 }
+                findVehicle();
+                setFields();
+                setVisible();
             } else {
                 Log.d("TAG", "Error retrieving user document: " + task.getException());
             }
         });
     }
 
+    /**
+     * find Vehicle and its child object from user's owned vehicle
+     */
     private void findVehicle(){
         if (vehicleId != null) {
-            for (Object ve: user.getOwnedVehicles()) {
-                Vehicle v = (Vehicle) ve;
-                if (v.getVehicleID().equals(vehicleId)) {
+            for (Object ve: user.getOwnedVehicles()) {      //each Object user's owned vehicles
+                Vehicle v = new Vehicle(ve);
+                if (v.getVehicleID().equals(vehicleId)) {   //if vehicle is the one we're looking for
                     vehicle = v;
-                    switch(vehicle.getTypeOfVehicle()) {
+                    switch(vehicle.getTypeOfVehicle()) {    //set child object
                         case "Car":
-                            car = (Car) ve;
+                            car = new Car(ve);
                             break;
                         case "Electric Car":
-                            electricCar = (ElectricCar) ve;
+                            electricCar = new ElectricCar(ve);
                             break;
                         default:
-                            motorcycle = (Motorcycle) ve;
+                            motorcycle = new Motorcycle(ve);
                     }
                     break;
                 }
             }
-
-            type = vehicle.getTypeOfVehicle();
+            type = vehicle.getTypeOfVehicle();              //indicate type of vehicle
         } else {
-            vehicle = new Vehicle(user);
+            vehicle = new Vehicle(user);                    //if not existing, instantiate new Vehicle
             vehicleId = vehicle.getVehicleID();
             type = "";
         }
     }
 
+    /**
+     * find image to set up view
+     */
     private void findImages(){
         if (vehicle.getImagesOfVehicle() != null && vehicle.getImagesOfVehicle().size() != 0) {
-            for (String id: vehicle.getImagesOfVehicle()) {
-                setImage(id);
-            }
+//            for (String id: vehicle.getImagesOfVehicle()) {
+//                setImage(id);
+//            }
             imageIndex = 0;
-            imageOfVehicle.setImageURI(imagesUri.get(imageIndex));
+            setImage(vehicle.getImagesOfVehicle().get(imageIndex));
         }
         setPicVisibility();
     }
 
+    /**
+     * set delete button, next, prev buttons based on which image the user is on
+     */
     private void setPicVisibility(){
-        if (imagesUri.size() == 0){
+        if (vehicle.getImagesOfVehicle().size() == 0){
             deleteImage.setVisibility(View.INVISIBLE);
             next.setVisibility(View.INVISIBLE);
             prev.setVisibility(View.INVISIBLE);
-        } else if (imagesUri.size() == 1) {
+        } else if (vehicle.getImagesOfVehicle().size() == 1) {
             deleteImage.setVisibility(View.VISIBLE);
             next.setVisibility(View.INVISIBLE);
             prev.setVisibility(View.INVISIBLE);
@@ -194,7 +214,7 @@ public class AddNewVehicleActivity extends AppCompatActivity implements AdapterV
             deleteImage.setVisibility(View.VISIBLE);
             next.setVisibility(View.VISIBLE);
             prev.setVisibility(View.INVISIBLE);
-        } else if (imageIndex == imagesUri.size() - 1){
+        } else if (imageIndex == vehicle.getImagesOfVehicle().size() - 1){
             deleteImage.setVisibility(View.VISIBLE);
             next.setVisibility(View.INVISIBLE);
             prev.setVisibility(View.VISIBLE);
@@ -205,18 +225,32 @@ public class AddNewVehicleActivity extends AppCompatActivity implements AdapterV
         }
     }
 
+    /**
+     * set details fields with correct information
+     */
     private void setFields(){
         title.setText(vehicle.getTitle());
         setSpecial();
-
-        if (vehicle.isSetUp()) {capacity.setText(vehicle.getCapacity());}
-        else {capacity.setText("");}
+        if (vehicle.isSetUp()) {
+            capacity.setText(""+vehicle.getCapacity());
+            createVehicle.setText("Update Vehicle");
+            numberPlate.setText(vehicle.getNumberPlate());
+        } else {
+            capacity.setText("");
+            createVehicle.setText("Create Vehicle");
+            numberPlate.setText("");
+        }
         findImages();
         owner.setText(user.getName());
         uniqueVehicleId.setText(vehicleId);
+        deleteImage.setImageResource(R.drawable.baseline_delete_forever_24);
         setSpinner();
     }
 
+    /**
+     * set image of vehicle based on imageId
+     * @param imageId
+     */
     private void setImage(String imageId){
         StorageReference imageToSet = firebaseStorage.getReference("image/" + imageId);
         File localFile = null;
@@ -225,30 +259,47 @@ public class AddNewVehicleActivity extends AppCompatActivity implements AdapterV
             File finalLocalFile = localFile;
             imageToSet.getFile(localFile).addOnSuccessListener(taskSnapshot -> {
                 imageUri = Uri.fromFile(finalLocalFile);
-                imagesUri.add(imageUri);
+                imageOfVehicle.setImageURI(imageUri);
             }).addOnFailureListener(exception -> Log.w("Error retrieving image", exception));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
+    /**
+     * when user presses the image to upload an image, call choosePicture()
+     * @param v
+     */
     public void uploadPic(View v){
         choosePicture();
     }
 
+    /**
+     * retrieve image selected by user, set as vehicle image
+     * @param requestCode The integer request code originally supplied to
+     *                    startActivityForResult(), allowing you to identify who this
+     *                    result came from.
+     * @param resultCode The integer result code returned by the child activity
+     *                   through its setResult().
+     * @param data An Intent, which can return result data to the caller
+     *               (various data can be attached to Intent "extras").
+     *
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 1 && resultCode == RESULT_OK && data != null && data.getData()!=null) {
             imageUri = data.getData();
             imageOfVehicle.setImageURI(imageUri);
-            imagesUri.add(imageUri);
-            imageIndex = imagesUri.size()-1;
+            imageIndex = vehicle.getImagesOfVehicle().size()-1;
             setPicVisibility();
             uploadPicture();
         }
     }
 
+    /**
+     * upload selected image to firebase storage
+     */
     private void uploadPicture() {
         final ProgressDialog pd = new ProgressDialog(this);
         pd.setTitle("Uploading Image...");
@@ -273,6 +324,9 @@ public class AddNewVehicleActivity extends AppCompatActivity implements AdapterV
                 });
     }
 
+    /**
+     * start new intent to choose picture
+     */
     private void choosePicture() {
         Intent intent = new Intent();
         intent.setType("image/*");
@@ -280,37 +334,68 @@ public class AddNewVehicleActivity extends AppCompatActivity implements AdapterV
         startActivityForResult(intent, 1);
     }
 
+    /**
+     * when user presses next image, show the next image
+     * @param v
+     */
     public void nextImage(View v){
         imageIndex++;
-        imageIndex %= imagesUri.size();
-        imageOfVehicle.setImageURI(imagesUri.get(imageIndex));
+        imageIndex %= vehicle.getImagesOfVehicle().size();
+        setImage(vehicle.getImagesOfVehicle().get(imageIndex));
         setPicVisibility();
     }
 
+    /**
+     * when user presses prev image, show the previous image
+     * @param v
+     */
     public void prevImage(View v){
         imageIndex--;
-        if (imageIndex < 0) { imageIndex = imagesUri.size()-1; }
-        imageOfVehicle.setImageURI(imagesUri.get(imageIndex));
+        if (imageIndex < 0) { imageIndex = vehicle.getImagesOfVehicle().size()-1; }
+        setImage(vehicle.getImagesOfVehicle().get(imageIndex));
         setPicVisibility();
     }
 
+    /**
+     * when user presses to delete image, ask for confirmation then delete
+     * @param v
+     */
     public void deleteImage(View v){
-        imagesUri.remove(imageIndex);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Delete Image");
+        builder.setMessage("Are you sure you want to delete this image?");
+
+        builder.setPositiveButton("Yes", (dialog, which) -> {
+            deleteImageHelper();
+        });
+
+        builder.setNegativeButton("No", (dialog, which) -> {
+        });
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+    }
+
+    /**
+     * remove image from vehicle and set the image to another
+     */
+    private void deleteImageHelper(){
         String imageToDelete = vehicle.getImagesOfVehicle().get(imageIndex);
         vehicle.getImagesOfVehicle().remove(imageIndex);
         removePicture(imageToDelete);
-        if (imageIndex==imagesUri.size()) { imageIndex = 0; }
-
-        if (imagesUri.size() != 0) {
-            imageOfVehicle.setImageURI(imagesUri.get(imageIndex));
+        if (imageIndex==vehicle.getImagesOfVehicle().size()) { imageIndex = 0; }
+        if (vehicle.getImagesOfVehicle().size() != 0) {
+            setImage(vehicle.getImagesOfVehicle().get(imageIndex));
         } else {
-            File localFile = new File("https://github.com/sherrys2025/PSET-CarpoolBuddy/blob/04a069387f8cc660c380cf9295bd833f2f88621c/app/src/main/res/drawable/cardefaultpic.png");
-            imageOfVehicle.setImageURI(Uri.fromFile(localFile));
+            imageOfVehicle.setImageResource(R.drawable.cardefaultpic);
             deleteImage.setVisibility(View.INVISIBLE);
         }
         setPicVisibility();
     }
 
+    /**
+     * delete image from firestore storage
+     * @param imageId
+     */
     private void removePicture(String imageId) {
         final ProgressDialog pd = new ProgressDialog(this);
         pd.setTitle("Deleting Image...");
@@ -330,6 +415,9 @@ public class AddNewVehicleActivity extends AppCompatActivity implements AdapterV
     }
 
 
+    /**
+     * set special field of details
+     */
     private void setSpecial(){
         if (car != null) {
             specialLabel.setHint("Car Model");
@@ -346,30 +434,67 @@ public class AddNewVehicleActivity extends AppCompatActivity implements AdapterV
         }
     }
 
+    /**
+     * set spinner as either car, electric car, or motorcycle
+     */
     private void setSpinner(){
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.types_of_vehicles, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         typeOfVehicle.setAdapter(adapter);
+        switch (vehicle.getTypeOfVehicle()) {
+            case "Motorcycle":
+                typeOfVehicle.setSelection(2);
+                break;
+            case "Electric Car":
+                typeOfVehicle.setSelection(1);
+                break;
+            default:
+                typeOfVehicle.setSelection(0);
+        }
         typeOfVehicle.setOnItemSelectedListener(this);
     }
 
+    /**
+     * set details as invisible while progress bar show
+     */
     private void setInvisible(){
         everythingView.setVisibility(View.INVISIBLE);
         progressBar.setVisibility(View.VISIBLE);
         progressBar.animate();
     }
 
+    /**
+     * set details as visible and hide progress bar
+     */
     private void setVisible(){
         everythingView.setVisibility(View.VISIBLE);
         progressBar.setVisibility(View.INVISIBLE);
     }
 
+    /**
+     * when user presses back button, return to vehicles page
+     * @param v
+     */
     public void backToVehicles(View v){
+        toVehicles();
+    }
+
+    /**
+     * start new intent to vehicles page
+     */
+    private void toVehicles() {
         Intent intent = new Intent(this, ViewVehicleActivity.class);
         intent.putExtra("uid", user.getUid());
         startActivity(intent);
     }
 
+    /**
+     * based on item selected on the Spinner, set type of vehicle
+     * @param parent The AdapterView where the selection happened
+     * @param view The view within the AdapterView that was clicked
+     * @param position The position of the view in the adapter
+     * @param id The row id of the item that is selected
+     */
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         type = parent.getItemAtPosition(position).toString();
@@ -384,31 +509,43 @@ public class AddNewVehicleActivity extends AppCompatActivity implements AdapterV
 
     }
 
+    /**
+     * update vehicle on firebase; update user with replaced vehicle on firebase
+     * @param v
+     */
     public void updateVehicle(View v){
         String newTitle = title.getText().toString();
         String uniqueModel = special.getText().toString();
         int cap = Integer.parseInt(capacity.getText().toString());
+        String numPlate = numberPlate.getText().toString();
 
         switch(type) {
             case "Car":
-                car = new Car(user, type, newTitle, cap, uniqueModel, true);
+                car = new Car(user, vehicleId, type, newTitle, cap, uniqueModel, numPlate, vehicle.getImagesOfVehicle(), true, vehicle.getRides());
                 updateUserFirebase(car);
                 updateVehicleFirebase(car);
                 break;
             case "Electric Car":
-                electricCar = new ElectricCar(user, type, newTitle, cap, uniqueModel, true);
+                electricCar = new ElectricCar(user, vehicleId, type, newTitle, cap, uniqueModel, numPlate, vehicle.getImagesOfVehicle(), true, vehicle.getRides());
                 updateUserFirebase(electricCar);
                 updateVehicleFirebase(electricCar);
                 break;
             default:
-                motorcycle = new Motorcycle(user, type, newTitle, cap, uniqueModel, true);
+                motorcycle = new Motorcycle(user, vehicleId, type, newTitle, cap, uniqueModel, numPlate, vehicle.getImagesOfVehicle(), true, vehicle.getRides());
                 updateUserFirebase(motorcycle);
                 updateVehicleFirebase(motorcycle);
         }
+
+        Toast.makeText(AddNewVehicleActivity.this, "Saved", Toast.LENGTH_SHORT).show();
+        toVehicles();
     }
 
+    /**
+     * update Car on firebase
+     * @param c
+     */
     private void updateVehicleFirebase(Car c) {
-        firestore.collection("vehicles").document(vehicle.getVehicleID()).set(car)
+        firestore.collection("vehicles").document(vehicleId).set(car)
                 .addOnCompleteListener(this, task -> {
                     if (task.isSuccessful()){
                         Log.w("Updated Firestore", "yay");
@@ -418,8 +555,12 @@ public class AddNewVehicleActivity extends AppCompatActivity implements AdapterV
                 });
     }
 
+    /**
+     * update ElectricCar on firebase
+     * @param c
+     */
     private void updateVehicleFirebase(ElectricCar c) {
-        firestore.collection("vehicles").document(vehicle.getVehicleID()).set(electricCar)
+        firestore.collection("vehicles").document(vehicleId).set(electricCar)
                 .addOnCompleteListener(this, task -> {
                     if (task.isSuccessful()){
                         Log.w("Updated Firestore", "yay");
@@ -429,6 +570,10 @@ public class AddNewVehicleActivity extends AppCompatActivity implements AdapterV
                 });
     }
 
+    /**
+     * update Motorcycle on firebase
+     * @param c
+     */
     private void updateVehicleFirebase(Motorcycle c) {
         firestore.collection("vehicles").document(vehicleId).set(motorcycle)
                 .addOnCompleteListener(this, task -> {
@@ -440,22 +585,50 @@ public class AddNewVehicleActivity extends AppCompatActivity implements AdapterV
                 });
     }
 
+    /**
+     * update user in Firebase
+     * @param c
+     */
     private void updateUserFirebase(Object c) {
+        int index = 0;
+        Vehicle v;
         switch(user.getUserType()){
             case "Student":
-                studentUser.addVehicle(c);
+                v = (Vehicle) c;
+                index = studentUser.containsVehicle(v);
+                if (index >= 0){
+                    studentUser.replaceVehicle(index, c);
+                } else {
+                    studentUser.addVehicle(c);
+                }
                 updateUserFirebaseHelper(studentUser);
                 break;
             case "Staff":
-                staffUser.addVehicle(c);
+                v = (Vehicle) c;
+                index = staffUser.containsVehicle(v);
+                if (index >= 0){
+                    staffUser.replaceVehicle(index, c);
+                } else {
+                    staffUser.addVehicle(c);
+                }
                 updateUserFirebaseHelper(staffUser);
                 break;
             default:
-                alumUser.addVehicle(c);
+                v = (Vehicle) c;
+                index = alumUser.containsVehicle(v);
+                if (index >= 0){
+                    alumUser.replaceVehicle(index, c);
+                } else {
+                    alumUser.addVehicle(c);
+                }
                 updateUserFirebaseHelper(alumUser);
         }
     }
 
+    /**
+     * update Student on firebase
+     * @param student
+     */
     private void updateUserFirebaseHelper(Student student){
         firestore.collection("users").document(userId).set(studentUser)
                 .addOnCompleteListener(this, task -> {
@@ -467,6 +640,10 @@ public class AddNewVehicleActivity extends AppCompatActivity implements AdapterV
                 });
     }
 
+    /**
+     * update Staff on firebase
+     * @param staff
+     */
     private void updateUserFirebaseHelper(Staff staff){
         firestore.collection("users").document(userId).set(staffUser)
                 .addOnCompleteListener(this, task -> {
@@ -478,6 +655,10 @@ public class AddNewVehicleActivity extends AppCompatActivity implements AdapterV
                 });
     }
 
+    /**
+     * update Alum on firebase
+     * @param alum
+     */
     private void updateUserFirebaseHelper(Alum alum){
         firestore.collection("users").document(userId).set(alumUser)
                 .addOnCompleteListener(this, task -> {

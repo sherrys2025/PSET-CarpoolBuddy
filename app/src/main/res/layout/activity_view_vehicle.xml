@@ -5,7 +5,24 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/darkgreen"
-    tools:context=".ViewVehicleActivity">
+    tools:context=".Activity.AddNewVehicle.ViewVehicleActivity">
+
+    <ProgressBar
+        android:id="@+id/progressBarMyVehicles"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="124dp"
+        android:layout_height="50dp"
+        android:indeterminate="true"
+        android:indeterminateTint="@color/lightgreen"
+        android:max="@integer/material_motion_duration_medium_1"
+        android:progress="@android:integer/config_mediumAnimTime"
+        android:progressTint="@color/lightgreen"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.5" />
 
     <ImageView
         android:id="@+id/addVehicle"
@@ -75,6 +92,7 @@
         android:backgroundTintMode="multiply"
         android:foregroundTint="@color/white"
         android:foregroundTintMode="multiply"
+        android:onClick="toRide"
         android:scaleType="fitXY"
         android:tintMode="multiply"
         app:layout_constraintStart_toEndOf="@+id/ViewVehiclesButton"
@@ -88,6 +106,7 @@
         android:layout_height="63dp"
         android:layout_marginTop="24dp"
         android:ems="10"
+        android:enabled="false"
         android:fontFamily="sans-serif-smallcaps"
         android:inputType="text"
         android:text="My Vehicles"
@@ -112,6 +131,18 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:tint="@color/lightgreen" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/myVehiclesRecycler"
+        android:layout_width="match_parent"
+        android:layout_height="542dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
+        app:layout_constraintBottom_toTopOf="@+id/imageView8"
+        app:layout_constraintTop_toBottomOf="@+id/myVehiclesLabel"
+        tools:layout_editor_absoluteX="1dp">
+
+    </androidx.recyclerview.widget.RecyclerView>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

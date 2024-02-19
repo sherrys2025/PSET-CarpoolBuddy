@@ -1,4 +1,4 @@
-package com.example.carpoolbuddy;
+package com.example.carpoolbuddy.Activity;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -8,6 +8,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.ProgressBar;
 
+import com.example.carpoolbuddy.Activity.Explore.VehicleProfileActivity;
+import com.example.carpoolbuddy.R;
 import com.example.carpoolbuddy.Users.Alum;
 import com.example.carpoolbuddy.Users.Staff;
 import com.example.carpoolbuddy.Users.Student;
@@ -18,6 +20,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
@@ -28,6 +31,13 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+/**
+ * This is an Activity class that lets users sign in, sign up, or sign in with Google. This Activity processes
+ * sign in after user has entered their email and password.
+ *
+ * @author sherrys2025
+ * @version 1.0
+ */
 public class LoadingActivity extends AppCompatActivity {
     private static final int RC_SIGN_IN = 9001;
 
@@ -43,18 +53,24 @@ public class LoadingActivity extends AppCompatActivity {
     private Student studentUser;
     private Staff staffUser;
 
+    /**
+     * On creating this activity...
+     * @param savedInstanceState If the activity is being re-initialized after
+     *     previously being shut down then this Bundle contains the data it most
+     *     recently supplied in {@link #onSaveInstanceState}.  <b><i>Note: Otherwise it is null.</i></b>
+     *
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_loading);
 
+        //Google sign in
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
                 .build();
-
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
-        // [END config_signin]
 
         mAuth = FirebaseAuth.getInstance();
         firestore = FirebaseFirestore.getInstance();
@@ -76,6 +92,17 @@ public class LoadingActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Sign in using Google
+     * @param requestCode The integer request code originally supplied to
+     *                    startActivityForResult(), allowing you to identify who this
+     *                    result came from.
+     * @param resultCode The integer result code returned by the child activity
+     *                   through its setResult().
+     * @param data An Intent, which can return result data to the caller
+     *               (various data can be attached to Intent "extras").
+     *
+     */
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -95,9 +122,11 @@ public class LoadingActivity extends AppCompatActivity {
             }
         }
     }
-    // [END onactivityresult]
 
-    // [START auth_with_google]
+    /**
+     * Sign into Firebase with the Google credentials
+     * @param idToken GoogleSignInAccount's Id token
+     */
     private void firebaseAuthWithGoogle(String idToken) {
         AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);
         mAuth.signInWithCredential(credential)
@@ -122,27 +151,30 @@ public class LoadingActivity extends AppCompatActivity {
                     }
                 });
     }
-    // [END auth_with_google]
 
-    // [START googlesignin]
+    /**
+     * Start Google sign in intent
+     */
     public void googleSignIn() {
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
-    // [END googlesignin]
 
-//    void uploadData(FirebaseUser mUser){
-//
-//    }
-
+    /**
+     * If sign in fails, return to Auth Activity with error message
+     * @param exceptionMessage error message to be displayed
+     */
     private void displayErrorMessage(String exceptionMessage){
         Intent intent = new Intent(this, AuthActivity.class);
         intent.putExtra("errorMsg", exceptionMessage);
         startActivity(intent);
     }
 
+    /**
+     * Sign in without Google
+     */
     public void signIn(){
-        String email = getIntent().getStringExtra("email");
+        String email = getIntent().getStringExtra("email"); //retrieve information
         String password = getIntent().getStringExtra("password");
 
         mAuth.signInWithEmailAndPassword(email, password)
@@ -160,10 +192,13 @@ public class LoadingActivity extends AppCompatActivity {
                     }
                 });
     }
-    public void signUp(){
-        String email = getIntent().getStringExtra("email");
-        String password = getIntent().getStringExtra("password");
 
+    /**
+     * Sign Up without Google
+     */
+    public void signUp(){
+        String email = getIntent().getStringExtra("email"); //retrieve information
+        String password = getIntent().getStringExtra("password");
 
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, task -> {
@@ -172,7 +207,7 @@ public class LoadingActivity extends AppCompatActivity {
                         FirebaseUser user = mAuth.getCurrentUser();
                         sendEmailVerification();
                         updateFirebase(user);
-                        updateUI(user);
+
                     } else {
                         // If sign in fails, display a message to the user.
                         Log.w("SIGN UP", "signUpWithEmail:failure", task.getException());
@@ -182,46 +217,53 @@ public class LoadingActivity extends AppCompatActivity {
                 });
     }
 
+    /**
+     * Send email verification after sign up
+     */
     private void sendEmailVerification() {
-        // Send verification email
-        // [START send_email_verification]
         final FirebaseUser user = mAuth.getCurrentUser();
         user.sendEmailVerification()
                 .addOnCompleteListener(this, task -> {
                     // Email sent
                 });
-        // [END send_email_verification]
     }
 
+    /**
+     * Update Firebase with new User
+     * @param currentUser FirebaseUser's current user
+     */
     private void updateFirebase(FirebaseUser currentUser){
-        System.out.println("updating firebase");
+        System.out.println("updating firebase, " + currentUser.getEmail());
         String email = currentUser.getEmail();
-        if (email.contains("@student.")) {
+        if (email.contains("@student.")) { // if Student:
             Student user = new Student(currentUser);
             firestore.collection("users").document(user.getUid()).set(user)
                     .addOnCompleteListener(this, task -> {
                         if (task.isSuccessful()){
                             Log.w("Updated Firestore", "yay");
+                            updateUI(currentUser);
                         } else {
                             Log.w("Oh no, oopsie", task.getException().getMessage().toString());
                         }
                     });
-        } else if (email.contains("@alumni.")) {
+        } else if (email.contains("@alumni.")) { // if Alumni:
             Alum user = new Alum(currentUser);
             firestore.collection("users").document(user.getUid()).set(user)
                     .addOnCompleteListener(this, task -> {
                         if (task.isSuccessful()){
                             Log.w("Updated Firestore", "yay");
+                            updateUI(currentUser);
                         } else {
                             Log.w("Oh no, oopsie", task.getException().getMessage().toString());
                         }
                     });
-        } else {
+        } else { // if Staff:
             Staff user = new Staff(currentUser);
             firestore.collection("users").document(user.getUid()).set(user)
                     .addOnCompleteListener(this, task -> {
                         if (task.isSuccessful()){
                             Log.w("Updated Firestore", "yay");
+                            updateUI(currentUser);
                         } else {
                             Log.w("Oh no, oopsie", task.getException().getMessage().toString());
                         }
@@ -229,25 +271,30 @@ public class LoadingActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Lead to next intent based on whether user has been set up or not
+     * @param user Firebase's current user
+     */
     protected void updateUI(FirebaseUser user){
 
         final Class[] nextClass = new Class[1];
         DocumentReference docRef = firestore.collection("users").document(user.getUid());
+
         docRef.get().addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         DocumentSnapshot document = task.getResult();
-                        if (document.exists()) {
-                            User user1 = document.toObject(User.class);
-                            if (!user1.isSetUp()){
-                                nextClass[0] = SettingsActivity.class;
-                            } else {
-                                nextClass[0] = VehicleProfileActivity.class;
-                            }
-                            Intent intent = new Intent(this, nextClass[0]);
-                            intent.putExtra("uid", user.getUid());
-                            startActivity(intent);
+                        User user1 = document.toObject(User.class);
+                        if (!user1.isSetUp()){ // if not set up
+                            nextClass[0] = SettingsActivity.class;
+                        } else { // if set up
+                            nextClass[0] = VehicleProfileActivity.class;
                         }
+                        Intent intent = new Intent(this, nextClass[0]);
+                        intent.putExtra("uid", user.getUid());
+                        startActivity(intent);
                     }
+                }).addOnFailureListener(e -> { // if failed to retrieve, create new user (only for new Google sign ins)
+                    updateFirebase(user);
                 });
     }
 
